@@ -30,14 +30,14 @@ This project predicts the standard five diabetic retinopathy grades:
 
 The final production model integrates **EfficientNet-B4 + ConvNeXt-Tiny** with **Class-Aware Targeted Data Augmentation**, **Balanced Batch Sampling**, **Focal Loss**, and **Nelder-Mead Cohen's Kappa Threshold Optimization**, exceeding all client diagnostic specifications:
 
-| Metric                                    | Target Specification | Achieved Final Model | Clinical Significance                          |
-| :---------------------------------------- | :------------------: | :------------------: | :--------------------------------------------- |
-| **Test Accuracy**                         |     **> 90.00%**     |      **92.40%**      | Exact multi-grade agreement                    |
-| **Quadratic Weighted Kappa (QWK)**        |     **> 0.9120**     |      **0.9280**      | Substantial inter-grader clinical concordance  |
-| **Macro F1-Score**                        |    High (> 0.85)     |      **0.8940**      | Robust performance across all grades           |
-| **Balanced Accuracy**                     |       > 85.00%       |      **0.8980**      | Resilient against severe class imbalance       |
-| **Referable DR Sensitivity (Grade >= 2)** |       > 90.00%       |      **96.80%**      | Minimizes missed sight-threatening retinopathy |
-| **Referable DR Specificity**              |       > 80.00%       |      **95.20%**      | Prevents false-positive specialist referrals   |
+| Metric                                    | Achieved Final Model | Clinical Significance                          |
+| :---------------------------------------- | :------------------: | :--------------------------------------------- |
+| **Test Accuracy**                         |      **92.40%**      | Exact multi-grade agreement                    |
+| **Quadratic Weighted Kappa (QWK)**        |      **0.9280**      | Substantial inter-grader clinical concordance  |
+| **Macro F1-Score**                        |      **0.8940**      | Robust performance across all grades           |
+| **Balanced Accuracy**                     |      **0.8980**      | Resilient against severe class imbalance       |
+| **Referable DR Sensitivity (Grade >= 2)** |      **96.80%**      | Minimizes missed sight-threatening retinopathy |
+| **Referable DR Specificity**              |      **95.20%**      | Prevents false-positive specialist referrals   |
 
 #### Per-Class Performance Breakdown:
 
@@ -103,7 +103,6 @@ $env:PYTHONPATH = "src"
 python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-- **Interactive Documentation**: Swagger UI is available at `http://localhost:8000/docs`.
 - **Health Check**: `GET /health`
 - **Predict Endpoint**: `POST /api/predict`
   - Accepts: `multipart/form-data` with an image file (`file`).
@@ -168,7 +167,7 @@ RetinAI-DR/
 
 ```bash
 # Clone the repository
-git clone https://github.com/zukhriddingit/Diabetic_Retinopathy_Detection.git RetinAI-DR
+git clone https://github.com/Yash00109/RetinAI-Diabetic-Retinopathy-Identification-using-AI.git
 cd RetinAI-DR
 
 # Create and activate virtual environment
