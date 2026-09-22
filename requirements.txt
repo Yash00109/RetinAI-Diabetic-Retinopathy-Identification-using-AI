@@ -1,0 +1,27 @@
+# Core Data & Imaging
+numpy>=1.23
+pandas>=1.5
+pyarrow>=12.0
+scikit-learn>=1.2
+scipy>=1.10
+openpyxl>=3.1
+Pillow>=9.4
+opencv-python>=4.8
+matplotlib>=3.7
+tqdm>=4.66
+
+# Deep Learning
+torch>=2.1
+torchvision>=0.16
+timm>=0.9
+
+# Web UI & Production API
+streamlit>=1.31
+fastapi>=0.100
+uvicorn>=0.20
+python-multipart>=0.0.6
+httpx>=0.24
+
+# Testing & Tracking
+pytest>=7.0
+wandb>=0.16

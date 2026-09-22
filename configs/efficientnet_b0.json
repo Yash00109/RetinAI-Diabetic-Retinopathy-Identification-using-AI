@@ -1,0 +1,49 @@
+{
+  "seed": 42,
+  "data": {
+    "csv_path": "data/raw/aptos/train.csv",
+    "image_dir": "data/raw/aptos/train_images",
+    "image_col": "id_code",
+    "label_col": "diagnosis",
+    "image_ext": ".png",
+    "num_classes": 5,
+    "val_size": 0.15,
+    "test_size": 0.15,
+    "quality_filter": true
+  },
+  "quality": {
+    "min_brightness": 25.0,
+    "max_brightness": 235.0,
+    "min_contrast": 8.0,
+    "min_blur_score": 18.0,
+    "min_retina_area_ratio": 0.18,
+    "max_retina_area_ratio": 0.97,
+    "max_retina_center_offset": 0.30,
+    "max_retina_aspect_ratio_delta": 0.55,
+    "min_retina_circularity": 0.25,
+    "min_orientation_landmark_confidence": 0.12,
+    "min_orientation_landmark_distance": 0.16,
+    "max_orientation_verticality": 0.80
+  },
+  "model": {
+    "name": "efficientnet_b0",
+    "pretrained": true,
+    "drop_rate": 0.25
+  },
+  "train": {
+    "epochs": 25,
+    "batch_size": 32,
+    "image_size": 320,
+    "learning_rate": 0.0002,
+    "weight_decay": 0.0001,
+    "num_workers": 4,
+    "class_weighting": true,
+    "mixed_precision": true,
+    "early_stopping_patience": 5
+  },
+  "logging": {
+    "output_dir": "artifacts/efficientnet_b0",
+    "use_wandb": false,
+    "wandb_project": "diabetic-retinopathy-efficientnet"
+  }
+}

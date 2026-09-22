@@ -1,0 +1,42 @@
+{
+  "sources": [
+    {
+      "name": "aptos_hf",
+      "type": "aptos_csv",
+      "root": "data/raw/aptos",
+      "csv_path": "data/raw/aptos/train.csv",
+      "image_dir": "data/raw/aptos/train_images",
+      "image_col": "id_code",
+      "label_col": "diagnosis",
+      "image_exts": [".png", ".jpg", ".jpeg"],
+      "enabled": true,
+      "notes": "APTOS format; can be produced from bumbledeep/aptos parquet with scripts/prepare_hf_aptos.py."
+    },
+    {
+      "name": "deepdrid",
+      "type": "generic_csv",
+      "root": "data/raw/deepdrid",
+      "csv_path": "data/raw/deepdrid/labels.csv",
+      "image_dir": "data/raw/deepdrid",
+      "image_col": "image",
+      "label_col": "diagnosis",
+      "quality_col": "quality",
+      "laterality_col": "laterality",
+      "image_exts": [".jpg", ".jpeg", ".png"],
+      "enabled": true,
+      "notes": "Run scripts/prepare_deepdrid.py after downloading DeepDRiD regular fundus data. Labels are mapped to 0-4 DR severity."
+    },
+    {
+      "name": "ddr",
+      "type": "generic_csv",
+      "root": "data/raw/ddr",
+      "csv_path": "data/raw/ddr/labels.csv",
+      "image_dir": "data/raw/ddr",
+      "image_col": "image",
+      "label_col": "diagnosis",
+      "image_exts": [".jpg", ".jpeg", ".png"],
+      "enabled": true,
+      "notes": "Run scripts/prepare_ddr.py after downloading DDR DR_grading data. Labels 0-4 are kept; DDR label 5 poor-quality rows are excluded."
+    }
+  ]
+}

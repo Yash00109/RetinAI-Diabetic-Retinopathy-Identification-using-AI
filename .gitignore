@@ -1,0 +1,22 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Local data and outputs
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+artifacts/*
+!artifacts/.gitkeep
+wandb/
+runs/
+*.pt
+*.pth
+*.ckpt
