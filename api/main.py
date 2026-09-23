@@ -1,7 +1,16 @@
 import json
 import os
+import sys
 import tempfile
 from pathlib import Path
+
+# Ensure project root and 'src' directory are in sys.path for cloud deployments (Render/Docker)
+ROOT_DIR = Path(__file__).resolve().parent.parent
+SRC_DIR = ROOT_DIR / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
 import torch
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile

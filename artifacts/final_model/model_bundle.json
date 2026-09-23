@@ -1,0 +1,40 @@
+{
+  "model_version": "v1.0.0-enterprise",
+  "model_architecture": "Ensemble (EfficientNet-B4 + ConvNeXt-Tiny)",
+  "ensemble_weights": {
+    "efficientnet_b4": 0.55,
+    "convnext_tiny": 0.45
+  },
+  "input_resolution": [
+    384,
+    384
+  ],
+  "optimal_thresholds": [
+    0.5842,
+    1.4821,
+    2.4783,
+    3.461
+  ],
+  "classes": {
+    "0": "No DR",
+    "1": "Mild",
+    "2": "Moderate",
+    "3": "Severe",
+    "4": "Proliferative DR"
+  },
+  "referable_dr_cutoff": 2,
+  "quality_gate": {
+    "blur_min_laplacian_var": 100.0,
+    "illumination_min": 15.0,
+    "illumination_max": 240.0
+  },
+  "final_metrics": {
+    "test_accuracy": 0.924,
+    "test_qwk": 0.928,
+    "target_accuracy_met": true,
+    "target_qwk_met": true,
+    "macro_f1": 0.894,
+    "referable_dr_sensitivity": 0.968,
+    "referable_dr_specificity": 0.952
+  }
+}

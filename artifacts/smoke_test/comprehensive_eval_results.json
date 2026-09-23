@@ -1,0 +1,130 @@
+{
+  "core_metrics": {
+    "accuracy": 0.7,
+    "balanced_accuracy": 0.49696969696969695,
+    "macro_f1": 0.396969696969697,
+    "quadratic_weighted_kappa": 0.6808510638297872,
+    "confusion_matrix": [
+      [
+        9,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0
+      ]
+    ],
+    "classification_report": {
+      "0": {
+        "precision": 0.8181818181818182,
+        "recall": 0.8181818181818182,
+        "f1-score": 0.8181818181818182,
+        "support": 11.0
+      },
+      "1": {
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1-score": 0.5,
+        "support": 1.0
+      },
+      "2": {
+        "precision": 0.6666666666666666,
+        "recall": 0.6666666666666666,
+        "f1-score": 0.6666666666666666,
+        "support": 6.0
+      },
+      "3": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 1.0
+      },
+      "4": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 1.0
+      },
+      "accuracy": 0.7,
+      "macro avg": {
+        "precision": 0.36363636363636365,
+        "recall": 0.49696969696969695,
+        "f1-score": 0.396969696969697,
+        "support": 20.0
+      },
+      "weighted avg": {
+        "precision": 0.6666666666666667,
+        "recall": 0.7,
+        "f1-score": 0.675,
+        "support": 20.0
+      }
+    }
+  },
+  "referable_dr": {
+    "sensitivity": 0.75,
+    "specificity": 1.0,
+    "ppv": 1.0,
+    "npv": 0.8571428571428571,
+    "roc_auc": 0.9166666666666667,
+    "pr_auc": 0.9186507936507936,
+    "threshold": 0.5,
+    "confusion_matrix": [
+      [
+        12,
+        0
+      ],
+      [
+        2,
+        6
+      ]
+    ]
+  },
+  "calibration": {
+    "brier_score": 0.4641117680988128,
+    "expected_calibration_error": 0.2872791200876236
+  },
+  "robustness": {
+    "blur": {
+      "QWK": 0.01869158878504673,
+      "Accuracy": 0.05,
+      "Macro_F1": 0.02
+    },
+    "brightness": {
+      "QWK": 0.4782608695652174,
+      "Accuracy": 0.4,
+      "Macro_F1": 0.24230769230769234
+    },
+    "noise": {
+      "QWK": 0.18181818181818177,
+      "Accuracy": 0.35,
+      "Macro_F1": 0.15964912280701754
+    }
+  }
+}

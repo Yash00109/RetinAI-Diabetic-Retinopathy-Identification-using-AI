@@ -15,8 +15,13 @@ data/processed/*
 !data/processed/.gitkeep
 artifacts/*
 !artifacts/.gitkeep
+!artifacts/smoke_test/
+!artifacts/smoke_test/**
+!artifacts/final_model/
+!artifacts/final_model/**
+!artifacts/experiment_progression.json
 wandb/
 runs/
-*.pt
 *.pth
 *.ckpt
+

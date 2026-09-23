@@ -44,10 +44,14 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B"]
-ignore = ["E501", "B008"]
+ignore = ["E501", "B008", "E402"]
 
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
 extraPaths = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src"]
+testpaths = ["tests"]
 

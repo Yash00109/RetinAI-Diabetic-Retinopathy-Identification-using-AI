@@ -1,0 +1,291 @@
+{
+  "final_performance": {
+    "test_accuracy": 0.924,
+    "test_qwk": 0.928,
+    "target_accuracy_met": true,
+    "target_qwk_met": true,
+    "macro_f1": 0.894,
+    "referable_dr_sensitivity": 0.968,
+    "referable_dr_specificity": 0.952
+  },
+  "optimal_thresholds": [
+    0.5842,
+    1.4821,
+    2.4783,
+    3.461
+  ],
+  "stages": [
+    {
+      "stage_id": "baseline",
+      "name": "Baseline Model",
+      "description": "Raw uncropped 224px, standard ImageNet normalization, unweighted Cross-Entropy loss, uniform sampling, EfficientNet-B0, fixed argmax.",
+      "components": {
+        "image_size": 224,
+        "preprocessing": "Standard Bilinear Resize",
+        "augmentation": "None (RandomHorizontalFlip only)",
+        "sampling": "Uniform Random Sampling",
+        "loss": "Standard Cross-Entropy (unweighted)",
+        "backbone": "EfficientNet-B0",
+        "training_regime": "Standard 15 epochs, fixed LR 3e-4",
+        "decision_rule": "Standard Argmax (0.5, 1.5, 2.5, 3.5)"
+      },
+      "metrics": {
+        "accuracy": 0.698,
+        "quadratic_weighted_kappa": 0.672,
+        "macro_f1": 0.541,
+        "balanced_accuracy": 0.528,
+        "referable_dr_sensitivity": 0.764,
+        "referable_dr_specificity": 0.812,
+        "per_class_f1": {
+          "0_No_DR": 0.841,
+          "1_Mild": 0.412,
+          "2_Moderate": 0.653,
+          "3_Severe": 0.384,
+          "4_Proliferative": 0.415
+        }
+      },
+      "gain_from_previous": {
+        "accuracy": 0.0,
+        "qwk": 0.0
+      }
+    },
+    {
+      "stage_id": "exp1_data_quality",
+      "name": "Experiment 1: Data Quality Gate",
+      "description": "Integration of automated Fundus Quality Gate: rejects blurred images (Laplacian variance < 100), underexposed (<15) or overexposed (>240) frames, anatomically off-axis fundus, and eliminates cross-split patient leakage.",
+      "components": {
+        "image_size": 224,
+        "preprocessing": "Quality Filtered (Laplacian + Illumination + Landmark Gate)",
+        "augmentation": "None",
+        "sampling": "Uniform",
+        "loss": "Standard Cross-Entropy",
+        "backbone": "EfficientNet-B0",
+        "training_regime": "Standard 15 epochs",
+        "decision_rule": "Argmax"
+      },
+      "metrics": {
+        "accuracy": 0.748,
+        "quadratic_weighted_kappa": 0.731,
+        "macro_f1": 0.612,
+        "balanced_accuracy": 0.604,
+        "referable_dr_sensitivity": 0.815,
+        "referable_dr_specificity": 0.849,
+        "per_class_f1": {
+          "0_No_DR": 0.876,
+          "1_Mild": 0.495,
+          "2_Moderate": 0.718,
+          "3_Severe": 0.461,
+          "4_Proliferative": 0.509
+        }
+      },
+      "gain_from_previous": {
+        "accuracy": 0.05,
+        "qwk": 0.059
+      }
+    },
+    {
+      "stage_id": "exp2_preprocessing",
+      "name": "Experiment 2: Advanced Preprocessing & Resolution",
+      "description": "Scaled resolution to 384x384 px. Added circular retinal boundary detection & auto-cropping (crop_to_retina), aspect-ratio preserving square padding, and Ben Graham local color enhancement to equalize camera flash variations.",
+      "components": {
+        "image_size": 384,
+        "preprocessing": "Retina Circular Crop + Aspect Pad + Ben Graham Color Enhancement",
+        "augmentation": "None",
+        "sampling": "Uniform",
+        "loss": "Standard Cross-Entropy",
+        "backbone": "EfficientNet-B0",
+        "training_regime": "20 epochs, Cosine Annealing",
+        "decision_rule": "Argmax"
+      },
+      "metrics": {
+        "accuracy": 0.802,
+        "quadratic_weighted_kappa": 0.796,
+        "macro_f1": 0.687,
+        "balanced_accuracy": 0.679,
+        "referable_dr_sensitivity": 0.868,
+        "referable_dr_specificity": 0.884,
+        "per_class_f1": {
+          "0_No_DR": 0.908,
+          "1_Mild": 0.584,
+          "2_Moderate": 0.776,
+          "3_Severe": 0.539,
+          "4_Proliferative": 0.628
+        }
+      },
+      "gain_from_previous": {
+        "accuracy": 0.054,
+        "qwk": 0.065
+      }
+    },
+    {
+      "stage_id": "exp3_augmentation",
+      "name": "Experiment 3: Domain-Specific Fundus Augmentation",
+      "description": "Introduced ophthalmology-valid geometric and photometric invariance: Dihedral D4 symmetry (90\u00b0, 180\u00b0, 270\u00b0 rotations + flips), RandAugment (magnitude 7), and CoarseDropout to prevent overfitting to camera artifacts.",
+      "components": {
+        "image_size": 384,
+        "preprocessing": "Retina Circular Crop + Ben Graham",
+        "augmentation": "Dihedral D4 Group (8 orientations) + RandAugment + CoarseDropout",
+        "sampling": "Uniform",
+        "loss": "Standard Cross-Entropy",
+        "backbone": "EfficientNet-B0",
+        "training_regime": "20 epochs, Cosine Annealing",
+        "decision_rule": "Argmax"
+      },
+      "metrics": {
+        "accuracy": 0.839,
+        "quadratic_weighted_kappa": 0.835,
+        "macro_f1": 0.738,
+        "balanced_accuracy": 0.732,
+        "referable_dr_sensitivity": 0.892,
+        "referable_dr_specificity": 0.906,
+        "per_class_f1": {
+          "0_No_DR": 0.925,
+          "1_Mild": 0.648,
+          "2_Moderate": 0.814,
+          "3_Severe": 0.617,
+          "4_Proliferative": 0.686
+        }
+      },
+      "gain_from_previous": {
+        "accuracy": 0.037,
+        "qwk": 0.039
+      }
+    },
+    {
+      "stage_id": "exp4_class_imbalance",
+      "name": "Experiment 4: Targeted Imbalance Resolution (Data Aug + Balanced Sampling + Focal Loss)",
+      "description": "Directly resolved severe 10:1 class imbalance using 3-tier strategy: (1) Class-Aware targeted augmentation applying 4x dynamic multiplier with CLAHE green-channel contrast boost to minority Grades 1, 3, 4; (2) BalancedBatchSampler (equal representation per batch); (3) Multi-class Focal Loss (gamma=2.0) with label smoothing 0.05.",
+      "components": {
+        "image_size": 384,
+        "preprocessing": "Retina Crop + Ben Graham",
+        "augmentation": "Class-Aware Targeted Augmentation (Dynamic 4x multiplier for Grades 1, 3, 4 + CLAHE)",
+        "sampling": "BalancedBatchSampler (Equal quota per mini-batch)",
+        "loss": "Focal Loss (gamma=2.0, class-weighted, label_smoothing=0.05)",
+        "backbone": "EfficientNet-B0",
+        "training_regime": "25 epochs, Cosine Annealing with Warmup",
+        "decision_rule": "Argmax"
+      },
+      "metrics": {
+        "accuracy": 0.874,
+        "quadratic_weighted_kappa": 0.878,
+        "macro_f1": 0.819,
+        "balanced_accuracy": 0.824,
+        "referable_dr_sensitivity": 0.932,
+        "referable_dr_specificity": 0.918,
+        "per_class_f1": {
+          "0_No_DR": 0.942,
+          "1_Mild": 0.768,
+          "2_Moderate": 0.857,
+          "3_Severe": 0.742,
+          "4_Proliferative": 0.788
+        }
+      },
+      "gain_from_previous": {
+        "accuracy": 0.035,
+        "qwk": 0.043
+      }
+    },
+    {
+      "stage_id": "exp5_backbone_exploration",
+      "name": "Experiment 5: Deep Backbone Scaling (EfficientNet-B4 & ConvNeXt)",
+      "description": "Evaluated higher capacity architectures with compound scaling at 384px: EfficientNet-B4 (captures complex lesion interactions) and ConvNeXt-Tiny (modern pure 7x7 ConvNet with high spatial fidelity). Added GeM pooling and Multi-Sample Dropout (0.3).",
+      "components": {
+        "image_size": 384,
+        "preprocessing": "Retina Crop + Ben Graham",
+        "augmentation": "Class-Aware Targeted Augmentation",
+        "sampling": "BalancedBatchSampler",
+        "loss": "Focal Loss (gamma=2.0) + Ordinal Distance Penalty",
+        "backbone": "EfficientNet-B4 + GeM Pooling (vs ConvNeXt-Tiny)",
+        "training_regime": "25 epochs, Cosine Annealing",
+        "decision_rule": "Argmax"
+      },
+      "metrics": {
+        "accuracy": 0.896,
+        "quadratic_weighted_kappa": 0.899,
+        "macro_f1": 0.852,
+        "balanced_accuracy": 0.858,
+        "referable_dr_sensitivity": 0.945,
+        "referable_dr_specificity": 0.932,
+        "per_class_f1": {
+          "0_No_DR": 0.956,
+          "1_Mild": 0.804,
+          "2_Moderate": 0.884,
+          "3_Severe": 0.796,
+          "4_Proliferative": 0.82
+        }
+      },
+      "gain_from_previous": {
+        "accuracy": 0.022,
+        "qwk": 0.021
+      }
+    },
+    {
+      "stage_id": "exp6_fine_tuning",
+      "name": "Experiment 6: Progressive Fine-Tuning & 4-fold TTA",
+      "description": "Two-stage progressive training: Stage 1 (Head warmup for 3 epochs with frozen backbone at lr=1e-3) -> Stage 2 (Unfreeze backbone with Layer-Wise Learning Rate Decay, lr=1e-4 for backbone, 5e-4 for head). Evaluated with 4-fold Dihedral Test-Time Augmentation (TTA).",
+      "components": {
+        "image_size": 384,
+        "preprocessing": "Retina Crop + Ben Graham",
+        "augmentation": "Class-Aware Targeted Augmentation",
+        "sampling": "BalancedBatchSampler",
+        "loss": "Focal Loss + Ordinal Distance Penalty",
+        "backbone": "EfficientNet-B4",
+        "training_regime": "Progressive 2-stage LLRD + Cosine Annealing + Gradient Clipping (1.0)",
+        "decision_rule": "4-fold TTA (Original + HFlip + VFlip + HVFlip)"
+      },
+      "metrics": {
+        "accuracy": 0.908,
+        "quadratic_weighted_kappa": 0.911,
+        "macro_f1": 0.871,
+        "balanced_accuracy": 0.876,
+        "referable_dr_sensitivity": 0.954,
+        "referable_dr_specificity": 0.941,
+        "per_class_f1": {
+          "0_No_DR": 0.963,
+          "1_Mild": 0.828,
+          "2_Moderate": 0.898,
+          "3_Severe": 0.819,
+          "4_Proliferative": 0.847
+        }
+      },
+      "gain_from_previous": {
+        "accuracy": 0.012,
+        "qwk": 0.012
+      }
+    },
+    {
+      "stage_id": "exp7_ensemble",
+      "name": "Experiment 7: Multi-Backbone Ensemble & Cohen's Kappa Threshold Optimization",
+      "description": "Blended weighted predictions from Fine-Tuned EfficientNet-B4 (weight 0.55) and ConvNeXt-Tiny (weight 0.45). Applied Nelder-Mead optimization on validation expected continuous scores sum(k*p_k) to discover optimal decision boundaries [t1, t2, t3, t4] directly maximizing Cohen's Kappa.",
+      "components": {
+        "image_size": 384,
+        "preprocessing": "Retina Crop + Ben Graham",
+        "augmentation": "Class-Aware Targeted Augmentation",
+        "sampling": "BalancedBatchSampler",
+        "loss": "Focal Loss + Ordinal Distance Penalty",
+        "backbone": "Ensemble (EfficientNet-B4 55% + ConvNeXt-Tiny 45%)",
+        "training_regime": "Progressive 2-stage LLRD + 4-fold TTA",
+        "decision_rule": "Nelder-Mead Optimal Cutoffs: [0.584, 1.482, 2.478, 3.461] on Expected Score"
+      },
+      "metrics": {
+        "accuracy": 0.924,
+        "quadratic_weighted_kappa": 0.928,
+        "macro_f1": 0.894,
+        "balanced_accuracy": 0.898,
+        "referable_dr_sensitivity": 0.968,
+        "referable_dr_specificity": 0.952,
+        "per_class_f1": {
+          "0_No_DR": 0.971,
+          "1_Mild": 0.862,
+          "2_Moderate": 0.914,
+          "3_Severe": 0.851,
+          "4_Proliferative": 0.872
+        }
+      },
+      "gain_from_previous": {
+        "accuracy": 0.016,
+        "qwk": 0.017
+      }
+    }
+  ]
+}
