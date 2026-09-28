@@ -14,7 +14,7 @@ from dr_detection.infer import predict_image
 # PAGE CONFIGURATION & STYLING
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="RetinAI-DR | Clinical Diagnostic AI",
+    page_title="RetinAI-DR | Research Prototype",
     page_icon="👁️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -88,6 +88,17 @@ CUSTOM_CSS = """
         margin: 1rem 0;
         font-weight: 500;
     }
+    
+    .research-disclaimer {
+        background-color: #FFFBEB;
+        color: #92400E;
+        border-left: 5px solid #F59E0B;
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
@@ -106,51 +117,78 @@ BENCHMARK_SAMPLES = {
 DEFAULT_CONFIG = "configs/efficientnet_b0.json"
 DEFAULT_CHECKPOINT = "artifacts/smoke_test/best_model.pt"
 
+
+def _load_verified_metrics(checkpoint_path: str) -> dict | None:
+    """Load verified metrics from the checkpoint directory, if they exist."""
+    checkpoint_dir = Path(checkpoint_path).parent
+    metrics_path = checkpoint_dir / "test_metrics.json"
+    if metrics_path.exists():
+        try:
+            return json.loads(metrics_path.read_text(encoding="utf-8"))
+        except Exception:
+            return None
+    return None
+
+
 # -----------------------------------------------------------------------------
 # SIDEBAR
 # -----------------------------------------------------------------------------
 with st.sidebar:
     st.image("https://img.icons8.com/fluency/96/ophthalmology.png", width=64)
     st.title("RetinAI-DR")
-    st.caption("Clinical Diabetic Retinopathy Diagnostic System • Enterprise Edition")
+    st.caption("Research Prototype — Diabetic Retinopathy Classification")
     st.divider()
 
-    st.subheader("System Performance")
-    col_sb1, col_sb2 = st.columns(2)
-    with col_sb1:
-        st.metric("Test Accuracy", "92.40%", delta="+22.6% vs Base")
-    with col_sb2:
-        st.metric("Test QWK", "0.9280", delta="+0.256 vs Base")
-
-    st.metric("Referable Sensitivity", "96.80%", delta="Target: >90%")
-    st.metric("Referable Specificity", "95.20%", delta="Target: >80%")
-
-    st.divider()
     st.subheader("Pipeline Configuration")
     config_path = st.text_input("Config Path", DEFAULT_CONFIG)
     checkpoint_path = st.text_input("Checkpoint Path", DEFAULT_CHECKPOINT)
     use_tta = st.checkbox("Test-Time Augmentation (TTA)", value=True, help="Averages horizontal flip predictions for stabilized confidence")
-    use_opt_thresholds = st.checkbox("Nelder-Mead Optimal Cutoffs", value=True, help="Applies Nelder-Mead calibrated continuous cutoffs to maximize QWK")
+    use_opt_thresholds = st.checkbox("Optimal Cutoffs", value=True, help="Applies calibrated continuous cutoffs to maximize QWK")
+
+    st.divider()
+
+    # Display verified metrics if they exist
+    st.subheader("Verified Model Performance")
+    verified_metrics = _load_verified_metrics(checkpoint_path)
+    if verified_metrics:
+        col_sb1, col_sb2 = st.columns(2)
+        with col_sb1:
+            acc = verified_metrics.get("accuracy", 0)
+            st.metric("Accuracy", f"{acc*100:.2f}%")
+        with col_sb2:
+            qwk = verified_metrics.get("quadratic_weighted_kappa", 0)
+            st.metric("QWK", f"{qwk:.4f}")
+        macro_f1 = verified_metrics.get("macro_f1", 0)
+        st.metric("Macro F1", f"{macro_f1:.4f}")
+    else:
+        st.info("No verified metrics found for the selected checkpoint. Run evaluation to generate metrics.")
 
     st.caption("Active Device: CPU / CUDA Auto-detected")
-    st.caption("Model Architecture: EfficientNet-B0 / Ensemble")
 
 # -----------------------------------------------------------------------------
 # HEADER
 # -----------------------------------------------------------------------------
 st.markdown("""
 <div class="main-header">
-    <h1 style="margin: 0; font-size: 1.85rem; font-weight: 700;">👁️ RetinAI-DR Medical Diagnostic Platform</h1>
+    <h1 style="margin: 0; font-size: 1.85rem; font-weight: 700;">👁️ RetinAI-DR Research Prototype</h1>
     <p style="margin: 0.35rem 0 0 0; color: #94A3B8; font-size: 1.05rem;">
-        Automated Diabetic Retinopathy Grading, Fundus Quality Gate, Clinical Triage, and Explainable AI (Grad-CAM)
+        Automated Diabetic Retinopathy Grading, Fundus Quality Gate, and Explainable AI (Grad-CAM)
     </p>
 </div>
 """, unsafe_allow_html=True)
 
-tabs = st.tabs(["🏥 Clinical Diagnosis & XAI", "📈 8-Stage Experimental Progression", "🚀 System Architecture & API"])
+st.markdown("""
+<div class="research-disclaimer">
+    ⚠️ <strong>Research Prototype Disclaimer:</strong> This system is NOT a clinical diagnostic tool. 
+    All predictions are probabilistic classifications intended to assist — never replace — clinical judgment 
+    by qualified healthcare professionals.
+</div>
+""", unsafe_allow_html=True)
+
+tabs = st.tabs(["🔬 Classification & Explainability", "📊 Model Information", "🚀 API Integration"])
 
 # =============================================================================
-# TAB 1: CLINICAL DIAGNOSIS & EXPLAINABLE AI
+# TAB 1: CLASSIFICATION & EXPLAINABLE AI
 # =============================================================================
 with tabs[0]:
     col_input, col_results = st.columns([1, 1.25], gap="large")
@@ -159,21 +197,21 @@ with tabs[0]:
         st.subheader("1. Fundus Image Input")
         input_mode = st.radio(
             "Select input source:",
-            ["🔬 Clinical Benchmark Gallery (Instant)", "📁 Upload Fundus Photograph"],
+            ["🔬 Sample Gallery", "📁 Upload Fundus Photograph"],
             horizontal=True,
         )
 
         image_to_process = None
         sample_label = None
 
-        if input_mode == "🔬 Clinical Benchmark Gallery (Instant)":
-            selected_case = st.selectbox("Select Validated Clinical Benchmark Case:", list(BENCHMARK_SAMPLES.keys()))
+        if input_mode == "🔬 Sample Gallery":
+            selected_case = st.selectbox("Select Sample Case:", list(BENCHMARK_SAMPLES.keys()))
             sample_path = BENCHMARK_SAMPLES[selected_case]
             if os.path.exists(sample_path):
                 image_to_process = sample_path
                 sample_label = selected_case
             else:
-                st.warning(f"Benchmark file not found at `{sample_path}`. Please upload an image.")
+                st.warning(f"Sample file not found at `{sample_path}`. Please upload an image.")
         else:
             uploaded_file = st.file_uploader(
                 "Upload digital retinal fundus photograph (PNG, JPG, JPEG):",
@@ -186,17 +224,17 @@ with tabs[0]:
                 sample_label = f"Uploaded: {uploaded_file.name}"
 
         if image_to_process:
-            st.image(image_to_process, caption=f"Input Fundus Photo: {sample_label}", use_container_width=True)
+            st.image(image_to_process, caption=f"Input: {sample_label}", use_container_width=True)
 
     with col_results:
-        st.subheader("2. Diagnostic Results & Triage")
+        st.subheader("2. Classification Results")
 
         if not image_to_process:
-            st.info("👈 Please select a clinical sample or upload a fundus photograph to begin automated evaluation.")
+            st.info("👈 Please select a sample or upload a fundus photograph to begin.")
         elif not os.path.exists(checkpoint_path):
             st.error(f"Checkpoint not found at `{checkpoint_path}`. Please verify the checkpoint path in the sidebar.")
         else:
-            with st.spinner("Executing Fundus Quality Gate, Neural Inference, and Clinical Triage..."):
+            with st.spinner("Running quality gate, neural inference, and classification..."):
                 try:
                     result = predict_image(
                         config_path=config_path,
@@ -207,7 +245,7 @@ with tabs[0]:
                         generate_gradcam=True,
                     )
                 except Exception as e:
-                    st.error(f"Inference Pipeline Error: {str(e)}")
+                    st.error(f"Inference Error: {str(e)}")
                     result = None
 
             if result:
@@ -231,12 +269,12 @@ with tabs[0]:
 
                 st.divider()
 
-                # ----------------- Clinical Prediction -----------------
+                # ----------------- Classification Result -----------------
                 if result["accepted"]:
                     pred = result["prediction"]
                     rec = result["clinical_recommendation"]
 
-                    st.markdown("#### Primary Diagnosis")
+                    st.markdown("#### Classification Result")
                     grade_id = pred["class_id"]
                     grade_name = pred["class_name"]
                     badge_color = rec["color"]
@@ -248,7 +286,7 @@ with tabs[0]:
                                 Grade {grade_id}: {grade_name}
                             </span>
                             <span style="float: right; font-size: 1rem; font-weight: 600; color: #CBD5E1;">
-                                Model Confidence: {pred['confidence']*100:.1f}% | Expected Score: {pred['expected_continuous_score']:.2f}
+                                Confidence: {pred['confidence']*100:.1f}% | Score: {pred['expected_continuous_score']:.2f}
                             </span>
                         </div>
                         """,
@@ -261,8 +299,9 @@ with tabs[0]:
                         st.markdown(
                             f"""
                             <div class="clinical-alert-referable">
-                                <strong>⚠️ REFERABLE DIABETIC RETINOPATHY DETECTED (Risk: {ref['probability']*100:.1f}%)</strong><br>
-                                <em>Clinical Action:</em> {rec['action']}
+                                <strong>⚠️ POTENTIALLY REFERABLE DIABETIC RETINOPATHY DETECTED (Probability: {ref['probability']*100:.1f}%)</strong><br>
+                                <em>Recommendation:</em> {rec['action']}<br>
+                                <em>Note:</em> Clinical assessment by a qualified ophthalmologist is recommended.
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -271,8 +310,8 @@ with tabs[0]:
                         st.markdown(
                             f"""
                             <div class="clinical-alert-routine">
-                                <strong>✅ NON-REFERABLE RETINOPATHY (Normal / Low Risk)</strong><br>
-                                <em>Clinical Action:</em> {rec['action']}
+                                <strong>✅ LOW RISK (Non-referable)</strong><br>
+                                <em>Recommendation:</em> {rec['action']}
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -289,102 +328,138 @@ with tabs[0]:
                     # Explainable AI (Grad-CAM)
                     if "gradcam" in result and os.path.exists(result["gradcam"]["output_path"]):
                         st.divider()
-                        st.markdown("#### 🔬 Explainable AI: Grad-CAM Retinal Lesion Localization")
-                        st.caption("Visualizes the specific retinal features (microaneurysms, hemorrhages, cotton wool spots) influencing the prediction.")
+                        st.markdown("#### 🔬 Grad-CAM Visualization")
+                        st.caption("Highlights retinal features influencing the classification. For research/educational purposes.")
                         cam_img_path = result["gradcam"]["output_path"]
                         st.image(cam_img_path, caption="Grad-CAM Activation Heatmap Overlay", use_container_width=True)
 
-                    # Export Consultation Summary
+                    # Export Report
                     st.divider()
                     report_json = json.dumps(result, indent=2)
                     st.download_button(
-                        label="📥 Download Clinical Consultation Report (JSON)",
+                        label="📥 Download Report (JSON)",
                         data=report_json,
-                        file_name="retinai_clinical_report.json",
+                        file_name="retinai_report.json",
                         mime="application/json",
                     )
 
 # =============================================================================
-# TAB 2: 8-STAGE EXPERIMENTAL PROGRESSION
+# TAB 2: MODEL INFORMATION
 # =============================================================================
 with tabs[1]:
-    st.subheader("8-Stage Experimental Progression Ladder")
-    st.markdown("""
-    This project followed a rigorous 8-stage empirical engineering methodology to conquer the severe 10:1 class imbalance, 
-    subtle spatial pathology, and achieve **Accuracy > 90%** and **Quadratic Weighted Kappa (QWK) > 0.912**.
+    st.subheader("Model Information")
+
+    st.markdown(f"""
+    | Property | Value |
+    |:---------|:------|
+    | **Config** | `{config_path}` |
+    | **Checkpoint** | `{checkpoint_path}` |
+    | **Architecture** | EfficientNet-B0 (via timm) |
+    | **Status** | Research baseline under reconstruction |
     """)
 
-    exp_json_path = Path("artifacts/experiment_progression.json")
-    if exp_json_path.exists():
-        exp_data = json.loads(exp_json_path.read_text(encoding="utf-8"))
-        stages = exp_data["stages"]
+    st.divider()
 
-        # Progression Chart
-        chart_data = pd.DataFrame([
-            {
-                "Stage": s["name"].split(":")[0],
-                "Accuracy (%)": s["metrics"]["accuracy"] * 100,
-                "QWK (x100)": s["metrics"]["quadratic_weighted_kappa"] * 100,
-                "Macro F1 (%)": s["metrics"]["macro_f1"] * 100,
-                "Referable Sens (%)": s["metrics"]["referable_dr_sensitivity"] * 100,
-            }
-            for s in stages
-        ])
+    st.subheader("Verified Metrics")
+    if verified_metrics:
+        col_m1, col_m2, col_m3, col_m4 = st.columns(4)
+        with col_m1:
+            st.metric("Accuracy", f"{verified_metrics.get('accuracy', 0)*100:.2f}%")
+        with col_m2:
+            st.metric("QWK", f"{verified_metrics.get('quadratic_weighted_kappa', 0):.4f}")
+        with col_m3:
+            st.metric("Macro F1", f"{verified_metrics.get('macro_f1', 0):.4f}")
+        with col_m4:
+            bal_acc = verified_metrics.get("balanced_accuracy", 0)
+            st.metric("Balanced Acc", f"{bal_acc*100:.2f}%" if bal_acc else "N/A")
 
-        st.line_chart(chart_data.set_index("Stage"))
+        if "classification_report" in verified_metrics:
+            st.subheader("Per-Class Results")
+            report = verified_metrics["classification_report"]
+            rows = []
+            class_names = {0: "No DR", 1: "Mild", 2: "Moderate", 3: "Severe", 4: "Proliferative DR"}
+            for cls_id in range(5):
+                cls_key = str(cls_id)
+                if cls_key in report:
+                    r = report[cls_key]
+                    rows.append({
+                        "Class": f"{cls_id} - {class_names.get(cls_id, cls_key)}",
+                        "Precision": f"{r.get('precision', 0):.4f}",
+                        "Recall": f"{r.get('recall', 0):.4f}",
+                        "F1-Score": f"{r.get('f1-score', 0):.4f}",
+                        "Support": int(r.get("support", 0)),
+                    })
+            if rows:
+                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
-        st.subheader("Experimental Breakdown & Component Impacts")
-        for s in stages:
-            m = s["metrics"]
-            g = s.get("gain_from_previous", {"accuracy": 0, "qwk": 0})
-            with st.expander(f"📌 {s['name']} — Accuracy: {m['accuracy']*100:.2f}% | QWK: {m['quadratic_weighted_kappa']:.4f} (ΔQWK: +{g['qwk']:.4f})"):
-                st.write(s["description"])
-                col_c1, col_c2, col_c3, col_c4 = st.columns(4)
-                with col_c1:
-                    st.metric("Accuracy", f"{m['accuracy']*100:.2f}%")
-                with col_c2:
-                    st.metric("QWK", f"{m['quadratic_weighted_kappa']:.4f}")
-                with col_c3:
-                    st.metric("Macro F1", f"{m['macro_f1']:.4f}")
-                with col_c4:
-                    st.metric("Referable Sensitivity", f"{m['referable_dr_sensitivity']*100:.2f}%")
-
-                st.json(s["components"])
+        if "confusion_matrix" in verified_metrics:
+            st.subheader("Confusion Matrix")
+            cm = verified_metrics["confusion_matrix"]
+            cm_df = pd.DataFrame(
+                cm,
+                index=[f"True {i}" for i in range(len(cm))],
+                columns=[f"Pred {i}" for i in range(len(cm[0]))],
+            )
+            st.dataframe(cm_df, use_container_width=True)
     else:
-        st.warning("Experiment progression results not found. Run `scripts/run_experiments_pipeline.py` to generate.")
+        st.warning("No verified metrics available for the selected checkpoint. Train and evaluate a model to generate verified metrics.")
+
+    st.divider()
+
+    # Experiment tracking placeholder
+    st.subheader("Experiment Tracking")
+    experiments_dir = Path("experiments")
+    if experiments_dir.exists():
+        exp_dirs = sorted([d for d in experiments_dir.iterdir() if d.is_dir() and d.name.startswith("EXP-")])
+        if exp_dirs:
+            for exp_dir in exp_dirs:
+                metrics_file = exp_dir / "metrics.json"
+                config_file = exp_dir / "config.json"
+                if metrics_file.exists():
+                    m = json.loads(metrics_file.read_text(encoding="utf-8"))
+                    with st.expander(f"📌 {exp_dir.name} — Accuracy: {m.get('accuracy', 0)*100:.2f}% | QWK: {m.get('quadratic_weighted_kappa', 0):.4f}"):
+                        st.json(m)
+                        if config_file.exists():
+                            st.json(json.loads(config_file.read_text(encoding="utf-8")))
+                else:
+                    st.text(f"{exp_dir.name}: No metrics.json found")
+        else:
+            st.info("No experiments found. Run training to create EXP-000.")
+    else:
+        st.info("No experiments directory found. Run training to begin.")
 
 # =============================================================================
-# TAB 3: SYSTEM ARCHITECTURE & API
+# TAB 3: API INTEGRATION
 # =============================================================================
 with tabs[2]:
-    st.subheader("System Architecture & Client API Integration")
+    st.subheader("API Integration")
     st.markdown("""
-    The RetinAI-DR system is designed for high-availability clinical deployment. It exposes a fully documented 
-    RESTful FastAPI service with endpoints for health monitoring, batch inference, and Grad-CAM explainability.
+    RetinAI-DR provides a REST API for programmatic access to the classification pipeline.
     """)
 
     col_api1, col_api2 = st.columns(2)
     with col_api1:
-        st.markdown("#### FastAPI Endpoints")
+        st.markdown("#### Endpoints")
         st.code("""
-# 1. Health & Performance Check
+# 1. Health Check
 GET  /health
-Response: {"status": "online", "device": "CPU", "target_accuracy_met": true, "target_qwk_met": true}
+Response: {"status": "online", "device": "CPU", "version": "0.2.0-research"}
 
-# 2. Complete Clinical Inference
+# 2. Model Information
+GET  /model-info
+Response: {"model_architecture": "...", "verified_metrics": {...}}
+
+# 3. Classification
 POST /predict?gradcam=true
 Body: multipart/form-data with 'file' (PNG/JPG image)
 
-# 3. Explainability Heatmap (Base64)
+# 4. Explainability Heatmap (Base64)
 POST /explain
 Body: multipart/form-data with 'file'
-
-# 4. Experimental Progression Benchmark Ladder
-GET  /experiments
         """, language="bash")
 
     with col_api2:
-        st.markdown("#### Python Client Integration Snippet")
+        st.markdown("#### Python Client Example")
         st.code("""
 import requests
 
@@ -392,22 +467,18 @@ API_URL = "http://localhost:8000/predict"
 image_path = "patient_fundus.png"
 
 with open(image_path, "rb") as f:
-    response = requests.post(API_URL, files={"file": f}, params={"gradcam": True})
+    response = requests.post(
+        API_URL, files={"file": f}, params={"gradcam": True}
+    )
 
 data = response.json()
-print("Diagnosis:", data["prediction"]["class_name"])
-print("Referable DR:", data["prediction"]["referable_dr"]["is_referable"])
-print("Clinical Urgency:", data["clinical_recommendation"]["urgency"])
+print("Grade:", data["prediction"]["class_name"])
+print("Confidence:", data["prediction"]["confidence"])
+print("Referable:", data["prediction"]["referable_dr"]["is_referable"])
         """, language="python")
 
     st.divider()
-    st.markdown("#### Production Deployment Checklist")
     st.markdown("""
-    - [x] Pre-flight Automated Fundus Quality Gate (Laplacian blur < 100, illumination boundaries).
-    - [x] Bounding box retinal auto-crop & Ben Graham color standardization.
-    - [x] Class-aware targeted data augmentation with dynamic minority multiplier.
-    - [x] Balanced mini-batch sampling and Multi-class Focal Loss.
-    - [x] Test-Time Augmentation (TTA) with Nelder-Mead continuous threshold optimization.
-    - [x] Grad-CAM visual explainability for clinical validation.
-    - [x] Performance targets exceeded: **Accuracy 92.40% > 90%**, **QWK 0.9280 > 0.9120**.
+    > **Disclaimer:** This API serves a research prototype. Predictions are probabilistic 
+    > classifications and must not be used for independent clinical diagnosis.
     """)

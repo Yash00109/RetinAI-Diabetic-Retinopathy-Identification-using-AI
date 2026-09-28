@@ -1,8 +1,17 @@
-# RetinAI -- Diabetic Retinopathy Detection using Artificial Intelligence
+# RetinAI — Diabetic Retinopathy Detection using Artificial Intelligence
 
-EfficientNet-based diabetic retinopathy severity classification with fundus image quality assurance, multi-dataset manifest training, Grad-CAM visualization, FastAPI backend for modern web apps, and interactive evaluation/demo interfaces.
+> **Research prototype** for automated diabetic retinopathy severity classification from retinal fundus photographs using deep learning.
 
-This project predicts the standard five diabetic retinopathy grades:
+EfficientNet-based classification pipeline with fundus image quality assurance, multi-dataset manifest training, Grad-CAM visualization, FastAPI backend, and interactive evaluation interfaces.
+
+> [!WARNING]
+> **This project is a research prototype.** It is NOT a clinical diagnostic tool and must NOT be used for independent medical diagnosis. All predictions require review by a qualified ophthalmologist.
+
+## Problem Statement
+
+Diabetic retinopathy (DR) is a leading cause of preventable blindness, affecting approximately one-third of people with diabetes. Early detection through regular retinal screening can prevent up to 95% of severe vision loss. This project aims to assist — not replace — clinical screening by automating the classification of fundus images into five standard DR severity grades.
+
+## DR Severity Grades
 
 | Label | Grade            | Description                                                                         |
 | ----: | ---------------- | ----------------------------------------------------------------------------------- |
@@ -12,123 +21,83 @@ This project predicts the standard five diabetic retinopathy grades:
 |     3 | Severe           | >20 intraretinal hemorrhages in 4 quadrants, or venous beading in 2+, or IRMA in 1+ |
 |     4 | Proliferative DR | Neovascularization, vitreous/preretinal hemorrhage                                  |
 
+## Dataset
+
+- **APTOS 2019 Blindness Detection** (via HuggingFace)
+- **Total images**: 3,662
+- **Train / Validation / Test split**: 2,562 / 550 / 550 (stratified)
+
+### Class Distribution
+
+| Class | Label            | Count | Percentage |
+| :---: | :--------------- | ----: | ---------: |
+|   0   | No DR            | 1,805 |     49.3%  |
+|   1   | Mild             |   370 |     10.1%  |
+|   2   | Moderate         |   999 |     27.3%  |
+|   3   | Severe           |   193 |      5.3%  |
+|   4   | Proliferative DR |   295 |      8.1%  |
+
+> Severe class imbalance (10:1 ratio between classes 0 and 3) is a key challenge addressed through weighted loss, balanced sampling, and class-aware augmentation.
+
+## Current Status
+
+> [!IMPORTANT]
+> **The reproducible research baseline is under active reconstruction.**
+> Previously reported metrics (92.40% accuracy, 0.928 QWK) were **not backed by reproducible checkpoints** and have been retracted. The current pipeline is being rebuilt from scratch with full experiment tracking and reproducibility.
+
+### Verified Experiments
+
+| Experiment | Model | Resolution | Loss | Status | Notes |
+|:-----------|:------|:-----------|:-----|:-------|:------|
+| EXP-000 | EfficientNet-B0 | 384 | Weighted CE | 🔄 Pending | Baseline reproduction |
+
+Results will be added here as experiments complete with genuine checkpoints and metrics.
+
 ## Highlights
 
-- **EfficientNet-B0 Architecture**: Deep CNN classification pipeline tailored for retinal fundus images.
+- **EfficientNet Architecture**: Deep CNN classification pipeline tailored for retinal fundus images.
 - **Fundus Quality Gate**: Automated pre-inference QA screening out low-contrast, blur, invalid crops, missing retinas, off-center frames, and flipped orientations.
-- **FastAPI REST Service (`api/`)**: High-performance backend ready for cloud deployment and seamless integration with web frontends (e.g., Lovable).
-- **Comprehensive Evaluation Suite**: Goes beyond simple accuracy to assess Quadratic Weighted Kappa (QWK), Referable DR clinical safety (Sensitivity, Specificity, ROC-AUC, PR-AUC), probability calibration (ECE, Brier Score), and image perturbation robustness.
+- **FastAPI REST Service (`api/`)**: Backend for serving predictions with quality checks and Grad-CAM.
+- **Comprehensive Evaluation Suite**: QWK, Macro F1, Balanced Accuracy, per-class metrics, referable DR sensitivity/specificity, calibration, and robustness testing.
 - **Multi-Dataset Manifest Builder**: Harmonizes APTOS 2019, DeepDRiD, and DDR datasets.
-- **Grad-CAM Explanations**: Visual saliency heatmaps highlighting retinal lesions that drove model predictions.
-- **Streamlit Demo**: Standalone web UI for rapid local testing and clinician demos.
+- **Grad-CAM Explanations**: Visual saliency heatmaps highlighting retinal features influencing predictions.
+- **Streamlit Demo**: Standalone web UI for rapid local testing and demonstrations.
 
 ---
 
-## Model Performance & Evaluation
+## Methodology
 
-### Verified Final Model Performance (Enterprise Ensemble)
+### Preprocessing
+1. **Retina circular crop**: Removes irrelevant black background
+2. **Aspect-ratio preserving square padding**: Prevents distortion
+3. **Ben Graham contrast enhancement**: Equalizes camera flash variations
 
-The final production model integrates **EfficientNet-B4 + ConvNeXt-Tiny** with **Class-Aware Targeted Data Augmentation**, **Balanced Batch Sampling**, **Focal Loss**, and **Nelder-Mead Cohen's Kappa Threshold Optimization**, exceeding all client diagnostic specifications:
+### Training Strategy
+- **Optimizer**: AdamW with weight decay
+- **Scheduler**: CosineAnnealingLR
+- **Early stopping**: Based on validation QWK
+- **Mixed precision**: AMP when CUDA available
+- **Gradient clipping**: max_norm=1.0
 
-| Metric                                    | Achieved Final Model | Clinical Significance                          |
-| :---------------------------------------- | :------------------: | :--------------------------------------------- |
-| **Test Accuracy**                         |      **92.40%**      | Exact multi-grade agreement                    |
-| **Quadratic Weighted Kappa (QWK)**        |      **0.9280**      | Substantial inter-grader clinical concordance  |
-| **Macro F1-Score**                        |      **0.8940**      | Robust performance across all grades           |
-| **Balanced Accuracy**                     |      **0.8980**      | Resilient against severe class imbalance       |
-| **Referable DR Sensitivity (Grade >= 2)** |      **96.80%**      | Minimizes missed sight-threatening retinopathy |
-| **Referable DR Specificity**              |      **95.20%**      | Prevents false-positive specialist referrals   |
+### Class Imbalance Strategy
+- **Weighted CrossEntropy**: Inverse-frequency class weights from training set only
+- **Focal Loss**: Configurable gamma for minority-class focus
+- **Balanced Batch Sampler**: Equal per-class quota per mini-batch
+- **Class-aware augmentation**: Stronger augmentation for minority classes
 
-#### Per-Class Performance Breakdown:
-
-| Class | Clinical Grade   | Precision | Recall (Sensitivity) |  F1-Score  |
-| :---: | :--------------- | :-------: | :------------------: | :--------: |
-| **0** | No DR            |  0.9680   |        0.9740        | **0.9710** |
-| **1** | Mild NPDR        |  0.8410   |        0.8840        | **0.8620** |
-| **2** | Moderate NPDR    |  0.9020   |        0.9260        | **0.9140** |
-| **3** | Severe NPDR      |  0.8380   |        0.8650        | **0.8510** |
-| **4** | Proliferative DR |  0.8620   |        0.8820        | **0.8720** |
-
----
-
-### The 8-Stage Experimental Progression Ladder
-
-The model was developed through an empirical 8-stage engineering progression to systematically overcome class imbalance, spatial pathology resolution, and ordinal distance penalties:
-
-| Stage                               | Engineering Contribution                                                  |  Accuracy  |    QWK     |  Macro F1  | Referable Sens |
-| :---------------------------------- | :------------------------------------------------------------------------ | :--------: | :--------: | :--------: | :------------: |
-| **Baseline**                        | Raw 224px, unweighted CE, uniform sampling, argmax                        |   69.80%   |   0.6720   |   0.5410   |     76.40%     |
-| **Exp 1: Data Quality Gate**        | Automated Laplacian blur filter, illumination boundaries, deduplication   |   74.80%   |   0.7310   |   0.6120   |     81.50%     |
-| **Exp 2: Preprocessing**            | Retina circular crop, aspect-ratio padding, Ben Graham enhancement, 384px |   80.20%   |   0.7960   |   0.6870   |     86.80%     |
-| **Exp 3: Targeted Augmentation**    | Dihedral $D_4$ invariance, RandAugment, Color Jitter, CoarseDropout       |   83.90%   |   0.8350   |   0.7380   |     89.20%     |
-| **Exp 4: Class Imbalance Solution** | Dynamic 4x minority data augmentation, `BalancedBatchSampler`, Focal Loss |   87.40%   |   0.8780   |   0.8190   |     93.20%     |
-| **Exp 5: Backbone Scaling**         | EfficientNet-B4 + ConvNeXt-Tiny with GeM pooling                          |   89.60%   |   0.8990   |   0.8520   |     94.50%     |
-| **Exp 6: Progressive Fine-Tuning**  | 2-stage head warmup, LLRD, Cosine Annealing, 4-fold TTA                   |   90.80%   |   0.9110   |   0.8710   |     95.40%     |
-| **Exp 7: Ensemble & Threshold Opt** | Multi-backbone blend + Nelder-Mead Kappa threshold optimization           | **92.40%** | **0.9280** | **0.8940** |   **96.80%**   |
-
-_Structured progression records are preserved in `artifacts/experiment_progression.json`._
-
----
-
-### Comprehensive Evaluation Suite
-
-We provide an extensive multi-phase evaluation script (`scripts/comprehensive_evaluation.py`) that executes:
-
-1. **Data & Split Validation**: Asserts label bounds [0–4], validates non-empty image files, and checks patient/source split isolation to prevent data leakage.
-2. **Clinical Safety & Referable DR**: Evaluates binary clinical decision boundary (Grade >= 2: Moderate, Severe, Proliferative DR) computing **Sensitivity, Specificity, Positive Predictive Value (PPV), Negative Predictive Value (NPV), and ROC-AUC / PR-AUC**.
-3. **Probability Calibration**: Measures model confidence reliability via **Brier Score** and **Expected Calibration Error (ECE)**.
-4. **Perturbation Robustness**: Evaluates model stability under realistic optical artifacts (Gaussian blur, exposure shifts, sensor noise).
-
-To run the complete evaluation suite:
-
-```bash
-python scripts/comprehensive_evaluation.py \
-  --checkpoint artifacts/smoke_test/best_model.pt \
-  --manifest data/processed/manifest_quality_accepted.csv \
-  --image-size 384 \
-  --output-dir artifacts/smoke_test
-```
-
----
-
-## FastAPI Web Service & Frontend Integration
-
-The project includes a production-ready FastAPI backend designed to serve predictions directly to modern web interfaces, such as the [Lovable Diabetic Retinopathy Frontend](https://lovable.dev/projects/76aadb0a-f0f0-461b-a180-f8d4b299004c).
-
-### Running the API Server
-
-```bash
-# Set PYTHONPATH and start uvicorn
-$env:PYTHONPATH = "src"
-python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-- **Health Check**: `GET /health`
-- **Predict Endpoint**: `POST /api/predict`
-  - Accepts: `multipart/form-data` with an image file (`file`).
-  - Response:
-    ```json
-    {
-      "prediction": 0,
-      "class_name": "No DR",
-      "confidence": 0.892,
-      "probabilities": {
-        "No DR": 0.892,
-        "Mild": 0.065,
-        "Moderate": 0.031,
-        "Severe": 0.008,
-        "Proliferative DR": 0.004
-      },
-      "quality_check": {
-        "passed": true,
-        "metrics": {
-          "mean_intensity": 112.4,
-          "blur_score": 380.2,
-          "has_circular_mask": true
-        }
-      }
-    }
-    ```
+### Evaluation Metrics
+| Metric | Purpose |
+|:-------|:--------|
+| Accuracy | Overall agreement |
+| Balanced Accuracy | Mean per-class recall |
+| Macro F1 | Class-balanced harmonic mean |
+| Weighted F1 | Frequency-weighted harmonic mean |
+| QWK | Ordinal inter-rater agreement |
+| Per-class Precision/Recall/F1 | Class-level performance |
+| Confusion Matrix | Error pattern analysis |
+| Referable DR Sensitivity/Specificity | Clinical safety (Grade ≥ 2) |
+| ROC-AUC, PR-AUC | Threshold-independent discrimination |
+| ECE, Brier Score | Probability calibration |
 
 ---
 
@@ -138,24 +107,15 @@ python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 RetinAI-DR/
 ├── api/                  # FastAPI REST API (endpoints, schemas, inference service)
 ├── app/                  # Streamlit single-image demo application
-├── artifacts/            # Model checkpoints, evaluation outputs, and run metrics
+├── artifacts/            # Model checkpoints and evaluation outputs
 ├── configs/              # Model configurations and dataset source specifications
 ├── data/                 # Fundus datasets (raw) and processed CSV manifests
+├── experiments/          # Reproducible experiment artifacts (EXP-000, EXP-001, ...)
 ├── scripts/              # Dataset prep, manifest creation, QA audit, training & eval
-│   ├── audit_manifest_quality.py
-│   ├── build_dataset_manifest.py
-│   ├── check_dataset_sources.py
-│   ├── comprehensive_evaluation.py
-│   ├── evaluate_manifest_checkpoint.py
-│   ├── make_gradcam.py
-│   ├── prepare_aptos.py
-│   └── train_manifest.py
-├── src/dr_detection/     # Reusable ML library (models, datasets, QA, metrics)
-├── tests/                # Automated pytest unit test suite
-├── .gitignore            # Git ignore rules for data and weight binaries
-├── LICENSE               # MIT License
+├── src/dr_detection/     # Reusable ML library (models, datasets, QA, metrics, losses)
+├── tests/                # Automated pytest test suite
+├── legacy/               # Archived unsupported claims (for provenance tracking)
 ├── pyproject.toml        # Build configuration and project metadata
-├── README.md             # Project documentation
 └── requirements.txt      # Python dependencies
 ```
 
@@ -185,8 +145,6 @@ python -m pip install -e .
 
 ### 2. Run Tests
 
-Verify system integrity with pytest:
-
 ```bash
 pytest
 ```
@@ -196,8 +154,6 @@ pytest
 ## Dataset Pipeline
 
 ### 1. Build and Audit Manifest
-
-Harmonize raw datasets into a single manifest:
 
 ```bash
 python scripts/build_dataset_manifest.py \
@@ -222,37 +178,39 @@ python scripts/audit_manifest_quality.py \
 
 ## Training
 
-Train EfficientNet-B0 on the quality-screened manifest:
+Train EfficientNet-B0 baseline on the quality-screened manifest:
 
 ```bash
 python scripts/train_manifest.py \
   --manifest data/processed/manifest_quality_accepted.csv \
-  --output-dir artifacts/manifest_b0_384_quality \
+  --output-dir experiments/EXP-000 \
   --model efficientnet_b0 \
-  --epochs 40 \
+  --epochs 25 \
   --batch-size 64 \
   --workers 4 \
   --image-size 384 \
   --learning-rate 0.0002 \
   --weight-decay 0.0001 \
   --drop-rate 0.25 \
-  --patience 8
+  --patience 8 \
+  --seed 42
 ```
 
 ---
 
 ## Inference & Demos
 
-### Streamlit Clinical Web Application
-
-Launch the clinical dashboard:
+### API Server
 
 ```bash
-# In PowerShell (Windows):
-& .\.venv\Scripts\streamlit.exe run app/app.py
+$env:PYTHONPATH = "src"
+python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+```
 
-# Or via Python module:
-python -m streamlit run app/app.py
+### Streamlit Application
+
+```bash
+& .\.venv\Scripts\streamlit.exe run app/app.py
 ```
 
 ### Grad-CAM Visual Heatmaps
@@ -264,6 +222,45 @@ python scripts/make_gradcam.py \
   --image path/to/fundus.png \
   --output artifacts/gradcam.png
 ```
+
+---
+
+## Reproduction Instructions
+
+Every experiment is stored in `experiments/EXP-XXX/` with:
+- `config.json` — full configuration
+- `train_history.csv` — epoch-by-epoch training log
+- `best_model.pt` — best checkpoint (selected by validation QWK)
+- `metrics.json` — final evaluation metrics
+- `test_predictions.csv` — per-sample predictions
+- `confusion_matrix.png` — visual confusion matrix
+
+To reproduce any experiment, use the saved `config.json` with `scripts/train_manifest.py`.
+
+---
+
+## Limitations
+
+- **Single dataset**: Trained only on APTOS 2019; performance on other populations is unknown.
+- **No external validation**: Model has not been validated on independent clinical datasets.
+- **Class imbalance**: Severe and Proliferative classes have limited training samples.
+- **Image quality dependence**: Performance may degrade on low-quality or non-standard fundus photographs.
+- **No longitudinal assessment**: Single-image classification only; does not track disease progression.
+
+## Future Work
+
+- Train and compare multiple architectures (EfficientNet-B3/B4, ConvNeXt-Tiny)
+- Implement ordinal/hybrid loss functions
+- Test-time augmentation and ensemble methods
+- Threshold optimization on validation set
+- External validation on DDR/DeepDRiD datasets
+- Grad-CAM analysis for clinical interpretability
+
+---
+
+## Disclaimer
+
+> **This software is a research prototype and is NOT approved for clinical use.** It does not independently diagnose, treat, or prevent any disease. All outputs are probabilistic classifications intended to assist — never replace — clinical judgment by qualified healthcare professionals. Predictions should be interpreted as: *"Potentially referable diabetic retinopathy detected. Clinical assessment by a qualified ophthalmologist is recommended."*
 
 ---
 

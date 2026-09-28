@@ -3,12 +3,12 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dr-detection-efficientnet"
-version = "0.1.0"
-description = "EfficientNet diabetic retinopathy detection with fundus image quality rejection."
+name = "retinai-dr"
+version = "0.2.0"
+description = "Research prototype for diabetic retinopathy severity classification from retinal fundus images using deep learning."
 readme = "README.md"
 requires-python = ">=3.9"
-authors = [{ name = "Zukhriddin" }]
+authors = [{ name = "Yash" }]
 license = { text = "MIT" }
 dependencies = [
   "numpy>=1.23",
@@ -54,4 +54,3 @@ extraPaths = ["src"]
 [tool.pytest.ini_options]
 pythonpath = [".", "src"]
 testpaths = ["tests"]
-

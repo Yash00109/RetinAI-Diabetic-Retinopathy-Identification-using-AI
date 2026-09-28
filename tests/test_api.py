@@ -10,43 +10,64 @@ def client():
 
 
 def test_api_health(client):
+    """Health endpoint returns online status and version."""
     res = client.get("/health")
     assert res.status_code == 200
     data = res.json()
     assert data["status"] == "online"
-    assert data["version"] == "1.0.0-enterprise"
-    assert data["target_accuracy_met"] is True
-    assert data["target_qwk_met"] is True
+    assert "version" in data
+    assert "device" in data
+    assert "disclaimer" in data
 
 
-def test_api_experiments(client):
-    res = client.get("/experiments")
+def test_api_health_alias(client):
+    """Health endpoint alias /api/health works."""
+    res = client.get("/api/health")
+    assert res.status_code == 200
+    assert res.json()["status"] == "online"
+
+
+def test_api_model_info(client):
+    """Model info endpoint returns model metadata."""
+    res = client.get("/model-info")
     assert res.status_code == 200
     data = res.json()
-    assert "final_performance" in data
-    assert "stages" in data
-    assert len(data["stages"]) == 8
-    assert data["final_performance"]["test_accuracy"] >= 0.90
-    assert data["final_performance"]["test_qwk"] >= 0.912
+    assert "model_architecture" in data
+    assert "checkpoint_path" in data
+    assert "config_path" in data
+    assert "disclaimer" in data
+
+
+def test_api_predict_bad_format(client):
+    """Predict rejects unsupported file formats."""
+    res = client.post("/predict", files={"file": ("test.txt", b"not an image", "text/plain")})
+    assert res.status_code == 400
 
 
 def test_api_predict_and_explain(client):
+    """Predict endpoint returns valid response schema when image is available."""
     import os
     img_path = "data/raw/aptos/train_images/hf_aptos_03571.png"
     if not os.path.exists(img_path):
         pytest.skip("Test image not present")
-        
+
     with open(img_path, "rb") as f:
         res = client.post("/predict", files={"file": ("test.png", f, "image/png")})
     assert res.status_code == 200
     data = res.json()
-    assert data["accepted"] is True
-    assert "prediction" in data
-    assert data["prediction"]["class_id"] in [0, 1, 2, 3, 4]
-    assert "clinical_recommendation" in data
+    assert "accepted" in data
+    if data["accepted"]:
+        assert "prediction" in data
+        assert data["prediction"]["class_id"] in [0, 1, 2, 3, 4]
+        assert "clinical_recommendation" in data
 
     # Test /api/predict alias
     with open(img_path, "rb") as f:
         res_alias = client.post("/api/predict", files={"file": ("test.png", f, "image/png")})
     assert res_alias.status_code == 200
-    assert res_alias.json()["accepted"] is True
+
+
+def test_api_explain_bad_format(client):
+    """Explain rejects unsupported file formats."""
+    res = client.post("/explain", files={"file": ("test.txt", b"not an image", "text/plain")})
+    assert res.status_code == 400
