@@ -1,0 +1,1852 @@
+{
+  "original_count": 3455,
+  "duplicates_removed": 126,
+  "final_count": 3329,
+  "split_counts": {
+    "train": 2346,
+    "val": 496,
+    "test": 487
+  },
+  "dedup_log": [
+    {
+      "hash": "6ca3150366e204e951e2b577b8c76c40",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02528.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02792.png",
+          "split": "train",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "ae142a26f1b1de16180a39467cf14c2a",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00090.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01840.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "64623d4e2653a447196f5a833bc5147a",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00164.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00865.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "986ef70237829545b5b1ebdd2954c1a0",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01515.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01428.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "f55e9fd381d62f0e1e8ef4ca4479ff35",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00366.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01300.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "0f8dd6bf02d46c2dfd0a4671692c92c4",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01281.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00754.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "262f2411a7f2d89be0671a55fe7c9586",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03133.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02360.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "4094598adc76ecfe7f20e266edbc3a11",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01772.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02076.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "fc851532172a7e87a01799066a3ef784",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01680.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01404.png",
+          "split": "train",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "57cb66228bc2aae1bfe6250e4ad4451d",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02728.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03576.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "a8866672de06a56b4de228ed12a215f0",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02744.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02210.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "4cce4057527e808f24073df4795aef26",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01179.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03634.png",
+          "split": "train",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "c658796165b1c9f3cae6173235e0e0d5",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02248.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02567.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "845a63d72ec2bea5ca1205eb42370ceb",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00297.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02388.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "32fa138d27a36ec25347a43c9e96d1b3",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02907.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00009.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "4cc42cf447e0763a513e0d714d7587f1",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02973.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03339.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "0c9727d0dd2fc2d172d41a2dbae9d8b7",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00665.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02426.png",
+          "split": "train",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "560e0a00dee342375bb949704328ed2f",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03414.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02698.png",
+          "split": "train",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "3b6a8be0f6c6b6c7ff6e63379c5ec30b",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02397.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00398.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "f7182073cc9ea78bd397d8b30eb59ede",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02960.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02258.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "5081a5d26214f245ff4afc25540dca76",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01488.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03099.png",
+          "split": "test",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "2fb3853945638458909decd7c92c1af1",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03371.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02905.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "ea5e015545e9a74d01d538a423d0d030",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00433.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03545.png",
+          "split": "val",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "c64897ef5227b13ed16d04b808de4aaa",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00989.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03284.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "21f3ddae7b84a4ab6a88f2c54f5c2267",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02226.png",
+        "split": "train",
+        "label": 3
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01580.png",
+          "split": "val",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "f860bda8ac8a556cc2bc60643586290d",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02912.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01730.png",
+          "split": "train",
+          "label": 1
+        },
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02407.png",
+          "split": "train",
+          "label": 1
+        },
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02784.png",
+          "split": "val",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "4e16e6febdd76fa2d4acb5e7f5debd0a",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00856.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02992.png",
+          "split": "train",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "313ee903e8d44fee06129a615f229774",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00388.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00837.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "24b1901de0b670124c5951b0d058653c",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01010.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01543.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "70a6685d612887379e754b1f365a44c3",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00758.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01756.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "85fa8cf730060ff057935c4e3f11fddb",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00435.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02813.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "005323c11345bc8384b8bc8c7b8c90bf",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02056.png",
+        "split": "train",
+        "label": 0
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02344.png",
+          "split": "test",
+          "label": 0
+        }
+      ]
+    },
+    {
+      "hash": "692aa100d4bea4f2820837908a7e688b",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02307.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00807.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "77e328257f5da1ce62ac3c2d9c96ed0f",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02158.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01663.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "9e4686d45307ad2d5036d27db0da5409",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02116.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01092.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "d1eb923ce376ca3aac9eb3038fda3909",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01783.png",
+        "split": "train",
+        "label": 3
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02074.png",
+          "split": "val",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "fff5685166ab43157f24db7c8287f386",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03352.png",
+        "split": "train",
+        "label": 3
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03482.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "7e489bfe75eefc4c44493e87a3f0a1c2",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01251.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00299.png",
+          "split": "train",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "f5dd7352905abf1196cc92c373877336",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00602.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00613.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "dcbca9ded626bdd5d05ee53fb2473a0a",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02801.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01200.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "c318e4ee464e2e0379a2951dec3a7c20",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02703.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03232.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "b642c64820cdc36447614092d1f2c128",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02585.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00785.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "4241c6e4384698fa21c097a9adebb855",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00898.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01691.png",
+          "split": "test",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "c8eea60d43dd2c6efbd7589aae83d80a",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01358.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02309.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "64c46fecd7a6e56aa8650998aafc915e",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03640.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01824.png",
+          "split": "val",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "a8002c36698626d96b3b39659fa3d8a0",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02704.png",
+        "split": "train",
+        "label": 0
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00583.png",
+          "split": "train",
+          "label": 0
+        }
+      ]
+    },
+    {
+      "hash": "5bd7218b529f7c174363169abec479ce",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03585.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03030.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "45eac525a1acd4e010b55fa4570db1bd",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01596.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00867.png",
+          "split": "train",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "5104a28732ceda22cd9388cac5123945",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00019.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02919.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "7a785736a2e60b95310b83a9818d6261",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00843.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00824.png",
+          "split": "train",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "19d277edb7f6c9b1da7399468fb3e877",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02351.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02667.png",
+          "split": "train",
+          "label": 1
+        },
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00431.png",
+          "split": "val",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "7f376cbbe4fb76e1a779b2de796cacaf",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02734.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00487.png",
+          "split": "train",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "c9bdb6a854073ead41871e0f666087a4",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00918.png",
+        "split": "train",
+        "label": 0
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01388.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "50c5b56a4d73e2852d90a9e2e42ebcf2",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02547.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03003.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "7e2efe2fb1e74555820f42f0111d9939",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00425.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00270.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "d74ec13d2d6443bb0f5ecf4a312d72b6",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01908.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01726.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "0ea62c28c9a8b2264ada925d5d883ac1",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00236.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01446.png",
+          "split": "test",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "f1971d4840892ad765c47b6405c12d35",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01037.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00168.png",
+          "split": "train",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "fd469c271c9a807ebad78fd45699b580",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00422.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00797.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "81aeb5fcd04e0cd1578363899a35cb41",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03627.png",
+        "split": "train",
+        "label": 3
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00145.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "6175cb34aba924b19611d0549c0101f8",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02467.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01818.png",
+          "split": "test",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "9c3f3e7c9b9543852698ea489e4ac244",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03583.png",
+        "split": "train",
+        "label": 0
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00870.png",
+          "split": "test",
+          "label": 0
+        }
+      ]
+    },
+    {
+      "hash": "331f6f3ef17f93c1643028d88fab3435",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00389.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02363.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "c74a91e2e749f603d69716d7e6fdb614",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01450.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02941.png",
+          "split": "val",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "d57cea714eb609f7c0992121bde57350",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00349.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00352.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "69239dad826ddae5637d56e4764be799",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01381.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03618.png",
+          "split": "val",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "7e3728d34b235b7722d900183379d165",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03018.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02044.png",
+          "split": "val",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "be0a5fe8cf3df1859547ecb72e328df6",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03474.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00273.png",
+          "split": "test",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "bdf226e2eaaad2244b1da49578cd2a03",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01651.png",
+        "split": "train",
+        "label": 3
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00847.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "00e682f8b3b9a9bf0e86456d999397c1",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00252.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03066.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "bcd5a1056ec427c68e5a692efcce0461",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00634.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01966.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "7bcc3fde0f640adb94a4ff718ede00f6",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03335.png",
+        "split": "train",
+        "label": 3
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02713.png",
+          "split": "test",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "6ae9ca7b4b4d01a7898eed03fed604e9",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03143.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02564.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "556708fe6b5171abb8eaeb871d81a628",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03332.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02171.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "711495067cdf2b520339499ef3210636",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02862.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01081.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "b3397a06ccb148c4b161388ec1f8e73d",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00234.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00709.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "5f7dd6809c22ad628178530c43139752",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02785.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02488.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "be61b41e7fb804068def475a5bc96406",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00190.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02111.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "d13b83638de7f5c1669c93068a8c7470",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02443.png",
+        "split": "train",
+        "label": 3
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01362.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "c059cb9b65917c660c4c1f34bfe4f665",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02003.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00920.png",
+          "split": "val",
+          "label": 2
+        },
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01156.png",
+          "split": "test",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "ca4d5be4b52bfdeb707e1bd33c0e7246",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01746.png",
+        "split": "train",
+        "label": 0
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03064.png",
+          "split": "test",
+          "label": 0
+        }
+      ]
+    },
+    {
+      "hash": "c2ad2323e1c76b8230e02245abee2170",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02222.png",
+        "split": "train",
+        "label": 3
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03559.png",
+          "split": "train",
+          "label": 2
+        },
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01135.png",
+          "split": "val",
+          "label": 3
+        }
+      ]
+    },
+    {
+      "hash": "ca3b0b99982ae55b8f8c01b46ec7aacc",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00651.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02672.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "593b899a234d536fe88343d9d290db34",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00944.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03297.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "793735536e4e6111dfdaa7289803f31e",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02890.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00043.png",
+          "split": "test",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "48ee21aee74b5ceeb2a892356e9e3d07",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01420.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00072.png",
+          "split": "test",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "3753df6f0b2d7650eb8c2c3e0aed7d96",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02778.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03112.png",
+          "split": "val",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "582d94e9745462a8b6761fdad1fca4b1",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02090.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00357.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "20c04d818309cb78e367227b3a906e73",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03172.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02916.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "b70f35c4355f052f3870a9379d872497",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01318.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03218.png",
+          "split": "train",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "bc5fd6504b95166ec9e920c7a45c9cc1",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03266.png",
+        "split": "train",
+        "label": 0
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02420.png",
+          "split": "test",
+          "label": 0
+        }
+      ]
+    },
+    {
+      "hash": "52a7db3dd31d480fce1a7472071a31d3",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02957.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03103.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "a51fddd799bec5235b26a1a4b4af8482",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01907.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00371.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "7eb32f986719697722764e1ba6720778",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02194.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03460.png",
+          "split": "test",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "9954a2d2d5611b9893769b1e649d65e3",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00257.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00627.png",
+          "split": "train",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "d7bbe7795c9aaf97e3ec63c362c85992",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00884.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02340.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "b354d7a78e2663a20a49a76101b4043c",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01871.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01892.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "c4eef88d44f01806b9aaa5e29fccb3a7",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03372.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00392.png",
+          "split": "val",
+          "label": 0
+        }
+      ]
+    },
+    {
+      "hash": "1cf3b54127d835147999909c0414877b",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03646.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02663.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "14c8b2c86106fcceb9cb3e44728057d1",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01611.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01723.png",
+          "split": "train",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "f9e76c0bb3e834fe2fc17812415501c3",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02214.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02261.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "b5343c32e2e0ce302bca5017da9fc750",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02302.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02209.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "48abaafd8628c5a09ab7dc230fd4cf6c",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02838.png",
+        "split": "train",
+        "label": 0
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00684.png",
+          "split": "val",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "3c5754d526b721b788c05b16ff0b6f3a",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00747.png",
+        "split": "train",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00384.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "53ed3446157e69ff4a798aab6a785cee",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02227.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02903.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "9b61ab74788aded64301d74d8d8b4a26",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03513.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01349.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "4a9ccc51e15563cf5f3ce089524f7088",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00548.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00766.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "17e37ff5b07ea80545de3b76a22030ea",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03277.png",
+        "split": "train",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02671.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "61c9e4d9e0eef1c849eeda95a80769c7",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00439.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00016.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "caf362e8f09bae582fba84219c2babb6",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01656.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02011.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "0146ca52bf675a97ff0625652c57ca7e",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00930.png",
+        "split": "train",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00219.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "9ff51a1c4dc11466a0ba63123e878dda",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00679.png",
+        "split": "val",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00059.png",
+          "split": "test",
+          "label": 1
+        }
+      ]
+    },
+    {
+      "hash": "b62965f1c5d032f1148c2a93d09e26f3",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02035.png",
+        "split": "val",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01876.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "2b5b9f1f1a93aeb51b851bbe82dcad5e",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03205.png",
+        "split": "val",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03063.png",
+          "split": "test",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "0c15d2380b2c4e74108f50d039822791",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03387.png",
+        "split": "val",
+        "label": 4
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01537.png",
+          "split": "test",
+          "label": 4
+        }
+      ]
+    },
+    {
+      "hash": "008b50b10607a51e7378c136df18bad6",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03477.png",
+        "split": "val",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03652.png",
+          "split": "val",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "0b2e8f805c45beffcab2398590ec1ce6",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00557.png",
+        "split": "val",
+        "label": 1
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03462.png",
+          "split": "test",
+          "label": 0
+        }
+      ]
+    },
+    {
+      "hash": "8b0c85da032f28f1aee4d3068e4a444b",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00271.png",
+        "split": "val",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_02694.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "01b535a1ea8a19fc5080e65d99b6ed20",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03382.png",
+        "split": "val",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00502.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "1903403f31f58e876b9e304a3255c677",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_00264.png",
+        "split": "test",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01978.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    },
+    {
+      "hash": "1e3df5b2f1f422a06cb907476698f2ef",
+      "kept": {
+        "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_03426.png",
+        "split": "test",
+        "label": 2
+      },
+      "removed": [
+        {
+          "image_path": "data\\raw\\aptos\\train_images\\hf_aptos_01706.png",
+          "split": "test",
+          "label": 2
+        }
+      ]
+    }
+  ]
+}

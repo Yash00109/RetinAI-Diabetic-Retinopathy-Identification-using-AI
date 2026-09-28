@@ -1,0 +1,142 @@
+{
+  "manifest_path": "data/processed/manifest_quality_accepted.csv",
+  "total_rows": 3455,
+  "columns": [
+    "image_id",
+    "image_path",
+    "label",
+    "source",
+    "exists",
+    "split"
+  ],
+  "label_stats": {
+    "valid_range": [
+      0,
+      4
+    ],
+    "unique_labels": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "invalid_labels": [],
+    "class_distribution": {
+      "0": 1710,
+      "1": 357,
+      "2": 927,
+      "3": 182,
+      "4": 279
+    }
+  },
+  "split_stats": {
+    "splits_found": [
+      "test",
+      "train",
+      "val"
+    ],
+    "split_counts": {
+      "train": 2405,
+      "val": 525,
+      "test": 525
+    }
+  },
+  "split_class_distribution": {
+    "test": {
+      "0": 260,
+      "1": 54,
+      "2": 140,
+      "3": 28,
+      "4": 43
+    },
+    "train": {
+      "0": 1193,
+      "1": 249,
+      "2": 643,
+      "3": 126,
+      "4": 194
+    },
+    "val": {
+      "0": 257,
+      "1": 54,
+      "2": 144,
+      "3": 28,
+      "4": 42
+    }
+  },
+  "file_stats": {
+    "existing_images": 3455,
+    "missing_images": 0,
+    "missing_files_sample": []
+  },
+  "duplicate_stats": {
+    "duplicate_filenames": 0,
+    "duplicate_filenames_sample": {}
+  },
+  "isolation": {
+    "train_val_overlap": 0,
+    "train_test_overlap": 0,
+    "val_test_overlap": 0,
+    "is_isolated": true
+  },
+  "content_duplicate_stats": {
+    "sample_size": 500,
+    "content_duplicates_found": 3,
+    "content_duplicates_sample": {
+      "2b5b9f1f1a93aeb51b851bbe82dcad5e": [
+        "data\\raw\\aptos\\train_images\\hf_aptos_03063.png",
+        "data\\raw\\aptos\\train_images\\hf_aptos_03205.png"
+      ],
+      "c9bdb6a854073ead41871e0f666087a4": [
+        "data\\raw\\aptos\\train_images\\hf_aptos_00918.png",
+        "data\\raw\\aptos\\train_images\\hf_aptos_01388.png"
+      ],
+      "711495067cdf2b520339499ef3210636": [
+        "data\\raw\\aptos\\train_images\\hf_aptos_02862.png",
+        "data\\raw\\aptos\\train_images\\hf_aptos_01081.png"
+      ]
+    }
+  },
+  "cross_split_content_duplicates": {
+    "found": 3,
+    "sample": {
+      "8b0c85da032f28f1aee4d3068e4a444b": {
+        "val": "data\\raw\\aptos\\train_images\\hf_aptos_00271.png",
+        "test": "data\\raw\\aptos\\train_images\\hf_aptos_02694.png"
+      },
+      "b62965f1c5d032f1148c2a93d09e26f3": {
+        "val": "data\\raw\\aptos\\train_images\\hf_aptos_02035.png",
+        "test": "data\\raw\\aptos\\train_images\\hf_aptos_01876.png"
+      },
+      "2b5b9f1f1a93aeb51b851bbe82dcad5e": {
+        "val": "data\\raw\\aptos\\train_images\\hf_aptos_03205.png",
+        "test": "data\\raw\\aptos\\train_images\\hf_aptos_03063.png"
+      }
+    }
+  },
+  "image_dimensions": {
+    "sample_size": 100,
+    "width_range": [
+      224,
+      224
+    ],
+    "height_range": [
+      224,
+      224
+    ],
+    "mean_width": 224.0,
+    "mean_height": 224.0
+  },
+  "summary": {
+    "total_images": 3455,
+    "existing_images": 3455,
+    "train_count": 2405,
+    "val_count": 525,
+    "test_count": 525,
+    "splits_isolated": true,
+    "no_invalid_labels": true,
+    "no_cross_split_duplicates": false,
+    "dataset_verified": false
+  }
+}
