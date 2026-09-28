@@ -11,12 +11,26 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from collections import Counter
 from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+SRC_DIR = ROOT_DIR / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+try:
+    if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
+        sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 import numpy as np
 import pandas as pd
 from PIL import Image
+
+from dr_detection.manifest import normalize_image_path
 
 
 def file_hash(path: Path, algorithm: str = "md5") -> str:
@@ -28,7 +42,7 @@ def file_hash(path: Path, algorithm: str = "md5") -> str:
     return h.hexdigest()
 
 
-def verify_dataset(manifest_path: str, output_dir: str) -> dict:
+def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | None = None) -> dict:
     """Verify dataset integrity and generate a report."""
     manifest = pd.read_csv(manifest_path)
     output_dir = Path(output_dir)
@@ -77,7 +91,7 @@ def verify_dataset(manifest_path: str, output_dir: str) -> dict:
     missing_files = []
     existing_count = 0
     for _, row in manifest.iterrows():
-        p = Path(row["image_path"])
+        p = normalize_image_path(row["image_path"], root_dir=root_dir)
         if p.exists():
             existing_count += 1
         else:
@@ -90,7 +104,7 @@ def verify_dataset(manifest_path: str, output_dir: str) -> dict:
     }
     
     # --- Duplicate check (by filename) ---
-    filenames = manifest["image_path"].apply(lambda x: Path(x).name)
+    filenames = manifest["image_path"].apply(lambda x: normalize_image_path(x).name)
     filename_counts = Counter(filenames)
     duplicates_by_name = {k: v for k, v in filename_counts.items() if v > 1}
     report["duplicate_stats"] = {
@@ -99,9 +113,9 @@ def verify_dataset(manifest_path: str, output_dir: str) -> dict:
     }
     
     # --- Train/Val/Test isolation check ---
-    train_images = set(manifest[manifest["split"] == "train"]["image_path"].values)
-    val_images = set(manifest[manifest["split"] == "val"]["image_path"].values)
-    test_images = set(manifest[manifest["split"] == "test"]["image_path"].values)
+    train_images = set(manifest[manifest["split"] == "train"]["image_path"].apply(lambda x: normalize_image_path(x).as_posix()).values)
+    val_images = set(manifest[manifest["split"] == "val"]["image_path"].apply(lambda x: normalize_image_path(x).as_posix()).values)
+    test_images = set(manifest[manifest["split"] == "test"]["image_path"].apply(lambda x: normalize_image_path(x).as_posix()).values)
     
     train_val_overlap = train_images & val_images
     train_test_overlap = train_images & test_images
@@ -128,7 +142,7 @@ def verify_dataset(manifest_path: str, output_dir: str) -> dict:
     sample_df = manifest.sample(n=sample_size, random_state=42) if len(manifest) > sample_size else manifest
     
     for _, row in sample_df.iterrows():
-        p = Path(row["image_path"])
+        p = normalize_image_path(row["image_path"], root_dir=root_dir)
         if p.exists():
             try:
                 h = file_hash(p)
@@ -150,7 +164,7 @@ def verify_dataset(manifest_path: str, output_dir: str) -> dict:
         split_df = manifest[manifest["split"] == split]
         split_sample = split_df.sample(n=min(len(split_df), 200), random_state=42) if len(split_df) > 200 else split_df
         for _, row in split_sample.iterrows():
-            p = Path(row["image_path"])
+            p = normalize_image_path(row["image_path"], root_dir=root_dir)
             if p.exists():
                 try:
                     h = file_hash(p)
@@ -169,7 +183,7 @@ def verify_dataset(manifest_path: str, output_dir: str) -> dict:
     dims = []
     dim_sample = manifest.sample(n=min(len(manifest), 100), random_state=42)
     for _, row in dim_sample.iterrows():
-        p = Path(row["image_path"])
+        p = normalize_image_path(row["image_path"], root_dir=root_dir)
         if p.exists():
             try:
                 with Image.open(p) as img:
@@ -230,6 +244,8 @@ def main():
     parser = argparse.ArgumentParser(description="Verify dataset integrity and freeze splits.")
     parser.add_argument("--manifest", default="data/processed/manifest_quality_accepted.csv",
                        help="Path to the manifest CSV to verify")
+    parser.add_argument("--data-dir", default=None,
+                       help="Root directory for dataset images (default: auto-detected)")
     parser.add_argument("--output-dir", default="experiments/EXP-000",
                        help="Directory to save the dataset report")
     parser.add_argument("--freeze-output", default="data/manifests/aptos_fixed_manifest.csv",
@@ -242,20 +258,20 @@ def main():
     print("RetinAI Dataset Verification — Phase 2")
     print("=" * 60)
     
-    report = verify_dataset(args.manifest, args.output_dir)
+    report = verify_dataset(args.manifest, args.output_dir, root_dir=args.data_dir)
     
     if report["summary"]["dataset_verified"]:
-        print("\n✅ Dataset verification PASSED")
+        print("\n[OK] Dataset verification PASSED")
         if not args.skip_freeze:
             freeze_split(args.manifest, args.freeze_output)
     else:
-        print("\n⚠️ Dataset verification found issues — review dataset_report.json")
+        print("\n[WARNING] Dataset verification found issues — review dataset_report.json")
         if not report["summary"]["splits_isolated"]:
-            print("  ❌ Split isolation failed — potential data leakage!")
+            print("  [FAIL] Split isolation failed — potential data leakage!")
         if not report["summary"]["no_invalid_labels"]:
-            print("  ❌ Invalid labels found")
+            print("  [FAIL] Invalid labels found")
         if not report["summary"]["no_cross_split_duplicates"]:
-            print("  ⚠️ Cross-split content duplicates detected")
+            print("  [WARNING] Cross-split content duplicates detected")
         
         # Still freeze if splits are isolated (most critical requirement)
         if report["summary"]["splits_isolated"] and not args.skip_freeze:

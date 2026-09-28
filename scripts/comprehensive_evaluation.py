@@ -9,6 +9,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from dr_detection.dataset import ManifestImageDataset
+from dr_detection.manifest import normalize_image_path
 from dr_detection.metrics import (
     binary_referable_metrics,
     calibration_metrics,
@@ -81,7 +82,7 @@ def main():
     # 2. Missing-image test
     missing = []
     for p in manifest["image_path"]:
-        if not os.path.exists(p):
+        if not normalize_image_path(p).exists():
             missing.append(p)
     print(f"Missing-image test: {'PASS' if len(missing) == 0 else 'FAIL'} (Missing: {len(missing)})")
     

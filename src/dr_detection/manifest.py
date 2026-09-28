@@ -49,6 +49,60 @@ def load_dataset_sources(path: str | Path) -> list[DatasetSource]:
     return [DatasetSource.from_dict(item) for item in raw.get("sources", [])]
 
 
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+
+
+def normalize_image_path(
+    image_path: str | Path,
+    root_dir: str | Path | None = None,
+) -> Path:
+    """Normalize image paths across Windows and Linux platforms.
+
+    Converts Windows backslashes ('\\') to forward slashes ('/') so that paths
+    recorded on Windows resolve correctly on Linux / POSIX systems.
+    Resolves relative paths against:
+      1. Current working directory (if the file exists there).
+      2. Explicit root_dir if provided (if the file exists there).
+      3. Repository root directory (if the file exists there).
+      4. Explicit root_dir if provided (fallback for non-existent/test paths).
+      5. Otherwise returns Path with normalized forward slashes.
+
+    Args:
+        image_path: Raw path string or Path object (may contain Windows backslashes).
+        root_dir: Optional root directory to resolve relative paths against.
+
+    Returns:
+        A pathlib.Path object that resolves correctly on both Windows and Linux.
+    """
+    if image_path is None:
+        raise ValueError("image_path cannot be None")
+
+    clean_str = str(image_path).replace("\\", "/").strip()
+    p = Path(clean_str)
+
+    if p.is_absolute():
+        return p
+
+    if p.exists():
+        return p
+
+    if root_dir is not None:
+        root_clean = Path(str(root_dir).replace("\\", "/"))
+        candidate = root_clean / clean_str
+        if candidate.exists():
+            return candidate
+
+    repo_candidate = REPO_ROOT / clean_str
+    if repo_candidate.exists():
+        return repo_candidate
+
+    if root_dir is not None:
+        root_clean = Path(str(root_dir).replace("\\", "/"))
+        return root_clean / clean_str
+
+    return p
+
+
 def resolve_image_path(image_dir: str | Path, image_id: str, image_exts: tuple[str, ...]) -> Path:
     image_dir = Path(image_dir)
     raw = Path(str(image_id))
@@ -84,7 +138,7 @@ def source_to_manifest(source: DatasetSource, require_images: bool = False) -> p
                 continue
         item = {
             "image_id": image_id,
-            "image_path": str(image_path),
+            "image_path": image_path.as_posix(),
             "label": int(row[source.label_col]),
             "source": source.name,
             "exists": bool(image_path.exists()),

@@ -62,6 +62,7 @@ def evaluate(args):
     test_ds = ManifestImageDataset(
         test_frame,
         transform=build_transforms(image_size, train=False, preprocess=True),
+        root_dir=getattr(args, "data_dir", None),
     )
     test_loader = DataLoader(
         test_ds, batch_size=config.get("batch_size", 32),
@@ -151,6 +152,7 @@ def main():
     parser = argparse.ArgumentParser(description="Evaluate a RetinAI experiment checkpoint.")
     parser.add_argument("--experiment-dir", required=True, help="Path to experiment directory")
     parser.add_argument("--manifest", default=None, help="Override manifest path")
+    parser.add_argument("--data-dir", default=None, help="Root directory for dataset images (default: auto-detected)")
     args = parser.parse_args()
     evaluate(args)
 

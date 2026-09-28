@@ -9,10 +9,18 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from collections import defaultdict
 from pathlib import Path
 
+ROOT_DIR = Path(__file__).resolve().parent.parent
+SRC_DIR = ROOT_DIR / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
 import pandas as pd
+
+from dr_detection.manifest import normalize_image_path
 
 
 def file_hash(path: Path) -> str:
@@ -37,7 +45,7 @@ def main():
     print("Computing file hashes (this may take a few minutes)...")
     hashes = []
     for _, row in manifest.iterrows():
-        p = Path(row["image_path"])
+        p = normalize_image_path(row["image_path"])
         if p.exists():
             hashes.append(file_hash(p))
         else:

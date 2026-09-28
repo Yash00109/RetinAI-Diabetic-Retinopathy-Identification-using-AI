@@ -1,6 +1,6 @@
 {
-  "manifest_path": "data/processed/manifest_quality_accepted.csv",
-  "total_rows": 3455,
+  "manifest_path": "data/manifests/aptos_fixed_manifest.csv",
+  "total_rows": 3329,
   "columns": [
     "image_id",
     "image_path",
@@ -23,11 +23,11 @@
     ],
     "invalid_labels": [],
     "class_distribution": {
-      "0": 1710,
-      "1": 357,
-      "2": 927,
-      "3": 182,
-      "4": 279
+      "0": 1703,
+      "1": 331,
+      "2": 860,
+      "3": 171,
+      "4": 264
     }
   },
   "split_stats": {
@@ -37,36 +37,36 @@
       "val"
     ],
     "split_counts": {
-      "train": 2405,
-      "val": 525,
-      "test": 525
+      "train": 2346,
+      "val": 496,
+      "test": 487
     }
   },
   "split_class_distribution": {
     "test": {
-      "0": 260,
-      "1": 54,
-      "2": 140,
-      "3": 28,
-      "4": 43
+      "0": 255,
+      "1": 49,
+      "2": 120,
+      "3": 26,
+      "4": 37
     },
     "train": {
-      "0": 1193,
-      "1": 249,
-      "2": 643,
-      "3": 126,
-      "4": 194
+      "0": 1192,
+      "1": 234,
+      "2": 612,
+      "3": 121,
+      "4": 187
     },
     "val": {
-      "0": 257,
-      "1": 54,
-      "2": 144,
-      "3": 28,
-      "4": 42
+      "0": 256,
+      "1": 48,
+      "2": 128,
+      "3": 24,
+      "4": 40
     }
   },
   "file_stats": {
-    "existing_images": 3455,
+    "existing_images": 3329,
     "missing_images": 0,
     "missing_files_sample": []
   },
@@ -82,38 +82,12 @@
   },
   "content_duplicate_stats": {
     "sample_size": 500,
-    "content_duplicates_found": 3,
-    "content_duplicates_sample": {
-      "2b5b9f1f1a93aeb51b851bbe82dcad5e": [
-        "data\\raw\\aptos\\train_images\\hf_aptos_03063.png",
-        "data\\raw\\aptos\\train_images\\hf_aptos_03205.png"
-      ],
-      "c9bdb6a854073ead41871e0f666087a4": [
-        "data\\raw\\aptos\\train_images\\hf_aptos_00918.png",
-        "data\\raw\\aptos\\train_images\\hf_aptos_01388.png"
-      ],
-      "711495067cdf2b520339499ef3210636": [
-        "data\\raw\\aptos\\train_images\\hf_aptos_02862.png",
-        "data\\raw\\aptos\\train_images\\hf_aptos_01081.png"
-      ]
-    }
+    "content_duplicates_found": 0,
+    "content_duplicates_sample": {}
   },
   "cross_split_content_duplicates": {
-    "found": 3,
-    "sample": {
-      "8b0c85da032f28f1aee4d3068e4a444b": {
-        "val": "data\\raw\\aptos\\train_images\\hf_aptos_00271.png",
-        "test": "data\\raw\\aptos\\train_images\\hf_aptos_02694.png"
-      },
-      "b62965f1c5d032f1148c2a93d09e26f3": {
-        "val": "data\\raw\\aptos\\train_images\\hf_aptos_02035.png",
-        "test": "data\\raw\\aptos\\train_images\\hf_aptos_01876.png"
-      },
-      "2b5b9f1f1a93aeb51b851bbe82dcad5e": {
-        "val": "data\\raw\\aptos\\train_images\\hf_aptos_03205.png",
-        "test": "data\\raw\\aptos\\train_images\\hf_aptos_03063.png"
-      }
-    }
+    "found": 0,
+    "sample": {}
   },
   "image_dimensions": {
     "sample_size": 100,
@@ -129,14 +103,14 @@
     "mean_height": 224.0
   },
   "summary": {
-    "total_images": 3455,
-    "existing_images": 3455,
-    "train_count": 2405,
-    "val_count": 525,
-    "test_count": 525,
+    "total_images": 3329,
+    "existing_images": 3329,
+    "train_count": 2346,
+    "val_count": 496,
+    "test_count": 487,
     "splits_isolated": true,
     "no_invalid_labels": true,
-    "no_cross_split_duplicates": false,
-    "dataset_verified": false
+    "no_cross_split_duplicates": true,
+    "dataset_verified": true
   }
 }

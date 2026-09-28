@@ -10,6 +10,7 @@ from PIL import Image
 
 from dr_detection.config import load_config
 from dr_detection.gradcam import make_gradcam
+from dr_detection.manifest import normalize_image_path
 from dr_detection.models import create_model
 from dr_detection.quality import (
     QualityThresholds,
@@ -103,12 +104,12 @@ def predict_image(
     """
     import torch
 
-    image_path = Path(image_path)
+    image_path = normalize_image_path(image_path)
     if not image_path.exists():
         raise FileNotFoundError(f"Image not found at {image_path}")
 
     # Checkpoint check
-    checkpoint_path = Path(checkpoint_path)
+    checkpoint_path = normalize_image_path(checkpoint_path)
     if not checkpoint_path.exists():
         raise FileNotFoundError(f"Checkpoint not found at {checkpoint_path}")
 

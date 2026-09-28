@@ -7,6 +7,7 @@ import numpy as np
 from PIL import Image
 
 from dr_detection.config import load_config
+from dr_detection.manifest import normalize_image_path
 from dr_detection.models import create_model
 from dr_detection.quality import crop_to_retina, load_rgb_image
 from dr_detection.transforms import build_transforms
@@ -32,6 +33,11 @@ def make_gradcam(
     class_id: int | None = None,
 ) -> dict:
     import torch
+
+    config_path = normalize_image_path(config_path)
+    checkpoint_path = normalize_image_path(checkpoint_path)
+    image_path = normalize_image_path(image_path)
+    output_path = normalize_image_path(output_path)
 
     cfg = load_config(config_path)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

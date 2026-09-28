@@ -119,6 +119,7 @@ def main() -> None:
     
     # Data
     parser.add_argument("--manifest", default="data/manifests/aptos_fixed_manifest.csv")
+    parser.add_argument("--data-dir", default=None, help="Root directory for dataset images (default: auto-detected)")
     
     # Model
     parser.add_argument("--model", default="efficientnet_b0")
@@ -192,10 +193,12 @@ def main() -> None:
     train_ds = ManifestImageDataset(
         train_frame,
         transform=build_transforms(args.image_size, train=True, preprocess=not args.no_preprocess, augmentation=args.augmentation),
+        root_dir=args.data_dir,
     )
     val_ds = ManifestImageDataset(
         val_frame,
         transform=build_transforms(args.image_size, train=False, preprocess=not args.no_preprocess),
+        root_dir=args.data_dir,
     )
     
     # Sampler

@@ -8,6 +8,7 @@ from PIL import Image
 from sklearn.model_selection import train_test_split
 
 from dr_detection.config import DataConfig
+from dr_detection.manifest import normalize_image_path
 from dr_detection.quality import (
     QualityThresholds,
     analyze_fundus_quality,
@@ -45,7 +46,7 @@ class AptosDataset:
     def _image_path(self, idx: int) -> Path:
         image_id = str(self.frame.loc[idx, self.image_col])
         suffix = "" if image_id.lower().endswith((".png", ".jpg", ".jpeg")) else self.image_ext
-        return self.image_dir / f"{image_id}{suffix}"
+        return normalize_image_path(self.image_dir / f"{image_id}{suffix}")
 
     def __getitem__(self, idx: int):
         path = self._image_path(idx)
@@ -74,6 +75,7 @@ class ManifestImageDataset:
         transform: Callable | None = None,
         image_col: str = "image_path",
         label_col: str = "label",
+        root_dir: str | Path | None = None,
     ) -> None:
         missing = {image_col, label_col}.difference(frame.columns)
         if missing:
@@ -82,12 +84,13 @@ class ManifestImageDataset:
         self.transform = transform
         self.image_col = image_col
         self.label_col = label_col
+        self.root_dir = root_dir
 
     def __len__(self) -> int:
         return len(self.frame)
 
     def __getitem__(self, idx: int):
-        path = Path(str(self.frame.loc[idx, self.image_col]))
+        path = normalize_image_path(self.frame.loc[idx, self.image_col], root_dir=self.root_dir)
         image = Image.open(path).convert("RGB")
         label = int(self.frame.loc[idx, self.label_col])
         if self.transform:
