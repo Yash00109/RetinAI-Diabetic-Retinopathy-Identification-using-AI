@@ -119,14 +119,41 @@ def build_transforms(
 
 class ClassAwareRetinaAugmentation:
     """Class-dependent dynamic augmentation multiplier and targeted transforms.
-    Minority classes (Grade 1 Mild, Grade 3 Severe, Grade 4 Proliferative) receive
-    targeted, higher-frequency and higher-diversity synthetic variations to equalize
-    feature manifold representations.
+
+    By default minority classes (Grade 1 Mild, Grade 3 Severe, Grade 4
+    Proliferative) receive targeted, higher-frequency and higher-diversity
+    synthetic variations to equalize feature manifold representations.
+
+    Parameters
+    ----------
+    image_size : int
+        Target image size for both standard and targeted pipelines.
+    preprocess : bool
+        Whether to include retinal preprocessing (crop + CLAHE).
+    minority_classes : set[int] | None
+        Labels that should receive *targeted* augmentation.
+        Defaults to ``{1, 3, 4}`` for backward compatibility.
+    augmentation_level : str
+        The ``augmentation`` argument forwarded to ``build_transforms``
+        for minority-class images.  ``"targeted"`` (default) or ``"strong"``.
     """
-    def __init__(self, image_size: int, preprocess: bool = True):
-        self.standard_transform = build_transforms(image_size, train=True, preprocess=preprocess, augmentation="standard")
-        self.targeted_transform = build_transforms(image_size, train=True, preprocess=preprocess, augmentation="targeted")
-        self.minority_classes = {1, 3, 4}
+
+    def __init__(
+        self,
+        image_size: int,
+        preprocess: bool = True,
+        minority_classes: set[int] | None = None,
+        augmentation_level: str = "targeted",
+    ):
+        self.standard_transform = build_transforms(
+            image_size, train=True, preprocess=preprocess, augmentation="standard",
+        )
+        self.targeted_transform = build_transforms(
+            image_size, train=True, preprocess=preprocess, augmentation=augmentation_level,
+        )
+        self.minority_classes: set[int] = (
+            minority_classes if minority_classes is not None else {1, 3, 4}
+        )
 
     def __call__(self, image: Image.Image, label: int):
         if label in self.minority_classes:

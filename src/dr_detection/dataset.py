@@ -69,10 +69,30 @@ class AptosDataset:
 
 
 class ManifestImageDataset:
+    """Dataset backed by a frozen manifest CSV.
+
+    Parameters
+    ----------
+    frame : pd.DataFrame
+        Manifest dataframe with at least ``image_col`` and ``label_col``.
+    transform : Callable | None
+        Standard ``torchvision``-style transform applied to every image.
+    label_transform : Callable | None
+        A callable with signature ``(image: PIL.Image, label: int) -> Tensor``
+        that receives both the image **and** its label, enabling class-aware
+        augmentation (e.g. ``ClassAwareRetinaAugmentation``).  When provided
+        this takes priority over *transform*.
+    image_col, label_col : str
+        Column names in the manifest.
+    root_dir : str | Path | None
+        Optional root directory prepended to relative image paths.
+    """
+
     def __init__(
         self,
         frame: pd.DataFrame,
         transform: Callable | None = None,
+        label_transform: Callable | None = None,
         image_col: str = "image_path",
         label_col: str = "label",
         root_dir: str | Path | None = None,
@@ -82,6 +102,7 @@ class ManifestImageDataset:
             raise ValueError(f"Manifest missing columns: {sorted(missing)}")
         self.frame = frame.reset_index(drop=True)
         self.transform = transform
+        self.label_transform = label_transform
         self.image_col = image_col
         self.label_col = label_col
         self.root_dir = root_dir
@@ -93,7 +114,9 @@ class ManifestImageDataset:
         path = normalize_image_path(self.frame.loc[idx, self.image_col], root_dir=self.root_dir)
         image = Image.open(path).convert("RGB")
         label = int(self.frame.loc[idx, self.label_col])
-        if self.transform:
+        if self.label_transform is not None:
+            image = self.label_transform(image, label)
+        elif self.transform is not None:
             image = self.transform(image)
         return image, label
 

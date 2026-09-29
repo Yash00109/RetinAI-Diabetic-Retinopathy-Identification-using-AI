@@ -43,7 +43,7 @@ from dr_detection.metrics import classification_metrics
 from dr_detection.models import create_model
 from dr_detection.sampler import BalancedBatchSampler, ClassAwareRandomSampler
 from dr_detection.train import class_weights_from_labels, run_epoch, set_seed
-from dr_detection.transforms import build_transforms
+from dr_detection.transforms import ClassAwareRetinaAugmentation, build_transforms
 
 
 def build_loss(loss_type: str, weights: torch.Tensor, label_smoothing: float, device, **kwargs):
@@ -150,7 +150,7 @@ def main() -> None:
     
     # Augmentation
     parser.add_argument("--augmentation", default="standard",
-                       choices=["standard", "targeted", "strong"])
+                       choices=["standard", "targeted", "strong", "class_targeted"])
     parser.add_argument("--no-preprocess", action="store_true")
     
     # Resume
@@ -190,11 +190,30 @@ def main() -> None:
     print(f"Train class distribution: {dict(train_frame['label'].value_counts().sort_index())}")
     
     # Datasets
-    train_ds = ManifestImageDataset(
-        train_frame,
-        transform=build_transforms(args.image_size, train=True, preprocess=not args.no_preprocess, augmentation=args.augmentation),
-        root_dir=args.data_dir,
-    )
+    # Build training dataset with appropriate augmentation pipeline
+    if args.augmentation == "class_targeted":
+        # EXP-005: class-aware augmentation targeting classes {3, 4}
+        class_targeted_aug = ClassAwareRetinaAugmentation(
+            image_size=args.image_size,
+            preprocess=not args.no_preprocess,
+            minority_classes={3, 4},
+            augmentation_level="strong",
+        )
+        train_ds = ManifestImageDataset(
+            train_frame,
+            label_transform=class_targeted_aug,
+            root_dir=args.data_dir,
+        )
+    else:
+        train_ds = ManifestImageDataset(
+            train_frame,
+            transform=build_transforms(
+                args.image_size, train=True,
+                preprocess=not args.no_preprocess,
+                augmentation=args.augmentation,
+            ),
+            root_dir=args.data_dir,
+        )
     val_ds = ManifestImageDataset(
         val_frame,
         transform=build_transforms(args.image_size, train=False, preprocess=not args.no_preprocess),
