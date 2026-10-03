@@ -151,6 +151,10 @@ class TestClassAwareRetinaAugmentation:
         )
         img = Image.fromarray(np.zeros((64, 64, 3), dtype=np.uint8))
 
+        # Replace the real Compose pipelines with mocks so we can assert calls
+        aug.targeted_transform = MagicMock(return_value=img)
+        aug.standard_transform = MagicMock(return_value=img)
+
         result = aug(img, 3)
         # targeted_transform was built with augmentation="targeted" → tag
         aug.targeted_transform.assert_called_once()
@@ -163,6 +167,10 @@ class TestClassAwareRetinaAugmentation:
         )
         img = Image.fromarray(np.zeros((64, 64, 3), dtype=np.uint8))
 
+        # Replace the real Compose pipelines with mocks so we can assert calls
+        aug.targeted_transform = MagicMock(return_value=img)
+        aug.standard_transform = MagicMock(return_value=img)
+
         result = aug(img, 0)
         aug.standard_transform.assert_called_once()
         aug.targeted_transform.assert_not_called()
@@ -173,6 +181,11 @@ class TestClassAwareRetinaAugmentation:
             image_size=64, preprocess=False, minority_classes={3, 4},
         )
         img = Image.fromarray(np.zeros((64, 64, 3), dtype=np.uint8))
+
+        # Replace the real Compose pipelines with mocks so we can assert calls
+        aug.targeted_transform = MagicMock(return_value=img)
+        aug.standard_transform = MagicMock(return_value=img)
+
         result = aug(img, 1)
         aug.standard_transform.assert_called_once()
         aug.targeted_transform.assert_not_called()

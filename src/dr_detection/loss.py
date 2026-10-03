@@ -83,7 +83,8 @@ class OrdinalDistanceLoss(nn.Module):
         
         probs = F.softmax(logits, dim=1) # [B, num_classes]
         # Expected score: sum_j j * p_j
-        expected_score = torch.sum(probs * self.grades, dim=1) # [B]
+        grades = self.grades.to(logits.device)
+        expected_score = torch.sum(probs * grades, dim=1)
         
         # Smooth L1 / MSE distance penalty
         distance_penalty = F.smooth_l1_loss(expected_score, targets.float(), beta=1.0)

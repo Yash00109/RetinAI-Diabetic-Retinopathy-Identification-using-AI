@@ -105,7 +105,7 @@ def normalize_image_path(
 
 def resolve_image_path(image_dir: str | Path, image_id: str, image_exts: tuple[str, ...]) -> Path:
     image_dir = Path(image_dir)
-    raw = Path(str(image_id))
+    raw = Path((image_id))
     candidates: list[Path] = []
     if raw.suffix.lower() in IMAGE_EXTENSIONS:
         candidates.append(image_dir / raw)
@@ -141,7 +141,7 @@ def source_to_manifest(source: DatasetSource, require_images: bool = False) -> p
             "image_path": image_path.as_posix(),
             "label": int(row[source.label_col]),
             "source": source.name,
-            "exists": bool(image_path.exists()),
+            "exists": (image_path.exists()),
         }
         if source.quality_col and source.quality_col in frame.columns:
             item["quality"] = row[source.quality_col]
@@ -189,7 +189,7 @@ def stratified_manifest_split(
 
 def summarize_manifest(manifest: pd.DataFrame) -> dict[str, Any]:
     summary: dict[str, Any] = {
-        "rows": int(len(manifest)),
+        "rows": len(manifest),
         "existing_images": int(manifest.get("exists", pd.Series(dtype=bool)).sum()) if "exists" in manifest else None,
         "sources": manifest["source"].value_counts().sort_index().to_dict() if "source" in manifest else {},
         "labels": manifest["label"].value_counts().sort_index().to_dict() if "label" in manifest else {},
