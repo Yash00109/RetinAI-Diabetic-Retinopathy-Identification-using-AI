@@ -22,6 +22,7 @@ if str(SRC_DIR) not in sys.path:
 
 try:
     if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
+        # pyrefly: ignore [missing-attribute]
         sys.stdout.reconfigure(encoding="utf-8")
 except Exception:
     pass
@@ -45,11 +46,13 @@ def file_hash(path: Path, algorithm: str = "md5") -> str:
 def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | None = None) -> dict:
     """Verify dataset integrity and generate a report."""
     manifest = pd.read_csv(manifest_path)
+    # pyrefly: ignore [bad-assignment]
     output_dir = Path(output_dir)
+    # pyrefly: ignore [missing-attribute]
     output_dir.mkdir(parents=True, exist_ok=True)
     
     report = {
-        "manifest_path": str(manifest_path),
+        "manifest_path": manifest_path,
         "total_rows": len(manifest),
         "columns": list(manifest.columns),
     }
@@ -65,26 +68,29 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
     labels = manifest["label"].values
     valid_labels = set(range(5))
     invalid_labels = set(labels) - valid_labels
+    # pyrefly: ignore [bad-assignment]
     report["label_stats"] = {
         "valid_range": [0, 4],
         "unique_labels": sorted(set(int(x) for x in labels)),
         "invalid_labels": sorted(int(x) for x in invalid_labels) if invalid_labels else [],
-        "class_distribution": {str(k): int(v) for k, v in sorted(Counter(labels).items())},
+        "class_distribution": {str(k): v for k, v in sorted(Counter(labels).items())},
     }
     
     # --- Split verification ---
     splits = manifest["split"].unique().tolist()
     split_counts = manifest["split"].value_counts().to_dict()
+    # pyrefly: ignore [bad-assignment]
     report["split_stats"] = {
         "splits_found": sorted(splits),
-        "split_counts": {str(k): int(v) for k, v in split_counts.items()},
+        "split_counts": {str(k): v for k, v in split_counts.items()},
     }
     
     # Per-split class distribution
     split_class_dist = {}
     for split in sorted(splits):
         split_df = manifest[manifest["split"] == split]
-        split_class_dist[split] = {str(k): int(v) for k, v in sorted(Counter(split_df["label"]).items())}
+        split_class_dist[split] = {str(k): v for k, v in sorted(Counter(split_df["label"]).items())}
+    # pyrefly: ignore [bad-assignment]
     report["split_class_distribution"] = split_class_dist
     
     # --- File existence check ---
@@ -97,6 +103,7 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
         else:
             missing_files.append(str(p))
     
+    # pyrefly: ignore [bad-assignment]
     report["file_stats"] = {
         "existing_images": existing_count,
         "missing_images": len(missing_files),
@@ -107,6 +114,7 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
     filenames = manifest["image_path"].apply(lambda x: normalize_image_path(x).name)
     filename_counts = Counter(filenames)
     duplicates_by_name = {k: v for k, v in filename_counts.items() if v > 1}
+    # pyrefly: ignore [bad-assignment]
     report["duplicate_stats"] = {
         "duplicate_filenames": len(duplicates_by_name),
         "duplicate_filenames_sample": dict(list(duplicates_by_name.items())[:10]),
@@ -121,6 +129,7 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
     train_test_overlap = train_images & test_images
     val_test_overlap = val_images & test_images
     
+    # pyrefly: ignore [bad-assignment]
     report["isolation"] = {
         "train_val_overlap": len(train_val_overlap),
         "train_test_overlap": len(train_test_overlap),
@@ -129,10 +138,13 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
     }
     
     if train_val_overlap:
+        # pyrefly: ignore [unsupported-operation]
         report["isolation"]["train_val_overlap_sample"] = list(train_val_overlap)[:5]
     if train_test_overlap:
+        # pyrefly: ignore [unsupported-operation]
         report["isolation"]["train_test_overlap_sample"] = list(train_test_overlap)[:5]
     if val_test_overlap:
+        # pyrefly: ignore [unsupported-operation]
         report["isolation"]["val_test_overlap_sample"] = list(val_test_overlap)[:5]
     
     # --- Content hash duplicate check (sample-based for speed) ---
@@ -151,6 +163,7 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
                 pass
     
     content_duplicates = {h: paths for h, paths in hash_to_paths.items() if len(paths) > 1}
+    # pyrefly: ignore [bad-assignment]
     report["content_duplicate_stats"] = {
         "sample_size": sample_size,
         "content_duplicates_found": len(content_duplicates),
@@ -173,6 +186,7 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
                     pass
     
     cross_split_dupes = {h: splits_dict for h, splits_dict in split_hashes.items() if len(splits_dict) > 1}
+    # pyrefly: ignore [bad-assignment]
     report["cross_split_content_duplicates"] = {
         "found": len(cross_split_dupes),
         "sample": dict(list(cross_split_dupes.items())[:5]),
@@ -193,6 +207,7 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
     
     if dims:
         widths, heights = zip(*dims)
+        # pyrefly: ignore [bad-assignment]
         report["image_dimensions"] = {
             "sample_size": len(dims),
             "width_range": [int(min(widths)), int(max(widths))],
@@ -202,16 +217,19 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
         }
     
     # --- Summary ---
+    # pyrefly: ignore [bad-assignment]
     report["summary"] = {
         "total_images": report["total_rows"],
         "existing_images": existing_count,
-        "train_count": int(split_counts.get("train", 0)),
-        "val_count": int(split_counts.get("val", 0)),
-        "test_count": int(split_counts.get("test", 0)),
+        "train_count": split_counts.get("train", 0),
+        "val_count": split_counts.get("val", 0),
+        "test_count": split_counts.get("test", 0),
+        # pyrefly: ignore [bad-index]
         "splits_isolated": report["isolation"]["is_isolated"],
         "no_invalid_labels": len(invalid_labels) == 0,
         "no_cross_split_duplicates": len(cross_split_dupes) == 0,
         "dataset_verified": (
+            # pyrefly: ignore [bad-index]
             report["isolation"]["is_isolated"]
             and len(invalid_labels) == 0
             and len(cross_split_dupes) == 0
@@ -220,6 +238,7 @@ def verify_dataset(manifest_path: str, output_dir: str, root_dir: str | Path | N
     }
     
     # Save report
+    # pyrefly: ignore [unsupported-operation]
     report_path = output_dir / "dataset_report.json"
     report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(f"\nDataset report saved to: {report_path}")

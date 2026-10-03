@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import random
 
 import cv2
@@ -48,7 +50,7 @@ class DihedralRotation:
             img = img.rotate(rot, expand=False)
         # Flip if k >= 4
         if k >= 4:
-            img = img.transpose(Image.FLIP_LEFT_RIGHT)
+            img = img.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
         return img
 
 
@@ -82,7 +84,7 @@ def build_transforms(
         steps.append(RetinaPreprocessor(RetinaPreprocessConfig()))
 
     if train:
-        aug_steps = [
+        aug_steps: list[Any] = [
             DihedralRotation(),
             transforms.RandomResizedCrop(image_size, scale=(0.80, 1.0), ratio=(0.90, 1.10)),
             transforms.RandomHorizontalFlip(p=0.5),

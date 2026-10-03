@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import cv2
 import numpy as np
@@ -41,7 +42,7 @@ def make_gradcam(
 
     cfg = load_config(config_path)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = create_model(cfg.model.name, cfg.data.num_classes, pretrained=False, drop_rate=cfg.model.drop_rate)
+    model: Any = create_model(cfg.model.name, cfg.data.num_classes, pretrained=False, drop_rate=cfg.model.drop_rate)
     checkpoint = torch.load(checkpoint_path, map_location=device)
     model.load_state_dict(checkpoint["model_state"])
     model.to(device)
@@ -49,7 +50,8 @@ def make_gradcam(
 
     rgb = crop_to_retina(load_rgb_image(image_path))
     image = Image.fromarray(rgb)
-    tensor = build_transforms(cfg.train.image_size, train=False)(image).unsqueeze(0).to(device)
+    transform: Any = build_transforms(cfg.train.image_size, train=False)
+    tensor = transform(image).unsqueeze(0).to(device)
 
     activations = []
     gradients = []
@@ -66,7 +68,7 @@ def make_gradcam(
     try:
         logits = model(tensor)
         predicted = int(logits.argmax(dim=1).item())
-        target = predicted if class_id is None else int(class_id)
+        target = predicted if class_id is None else class_id
         model.zero_grad(set_to_none=True)
         logits[0, target].backward()
 
@@ -83,10 +85,10 @@ def make_gradcam(
         handle_b.remove()
 
     heatmap = cv2.resize(cam, (rgb.shape[1], rgb.shape[0]))
-    heatmap = np.uint8(255 * heatmap)
+    heatmap = (255 * heatmap).astype(np.uint8)
     heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
     heatmap = cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB)
-    overlay = np.uint8(0.55 * rgb + 0.45 * heatmap)
+    overlay = (0.55 * rgb + 0.45 * heatmap).astype(np.uint8)
 
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)

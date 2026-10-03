@@ -226,6 +226,7 @@ def main() -> None:
     )
     
     if batch_sampler is not None:
+        # pyrefly: ignore [bad-argument-type]
         train_loader = DataLoader(train_ds, batch_sampler=batch_sampler, num_workers=args.workers, pin_memory=True)
     else:
         train_loader = DataLoader(

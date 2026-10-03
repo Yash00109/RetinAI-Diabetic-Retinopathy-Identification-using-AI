@@ -28,7 +28,7 @@ def check_source(source, sample: int) -> dict:
         return result
 
     frame = pd.read_csv(csv_path)
-    result["rows"] = int(len(frame))
+    result["rows"] = len(frame)
     if source.label_col in frame.columns:
         result["label_counts"] = frame[source.label_col].value_counts().sort_index().to_dict()
     if source.image_col in frame.columns:
