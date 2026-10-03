@@ -17,17 +17,17 @@ from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.schemas import (
-    ExperimentsResponse,
     ExplainResponse,
     HealthResponse,
+    ModelInfoResponse,
     PredictionResponse,
 )
-from api.services.prediction import get_gradcam_base64, get_prediction
+from api.services.prediction import get_gradcam_base64, get_prediction, get_model_info
 
 app = FastAPI(
-    title="RetinAI-DR Medical AI Platform API",
-    description="Enterprise-grade Diabetic Retinopathy detection, clinical risk triage, and Grad-CAM explainability service.",
-    version="1.0.0"
+    title="RetinAI-DR API",
+    description="Research prototype API for Diabetic Retinopathy classification from retinal fundus images.",
+    version="0.2.0-research"
 )
 
 # Allow CORS for client integrations
@@ -46,11 +46,17 @@ async def health_check():
     device_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU"
     return {
         "status": "online",
-        "version": "1.0.0-enterprise",
+        "version": "0.2.0-research",
         "device": device_name,
-        "target_accuracy_met": True,
-        "target_qwk_met": True
+        "disclaimer": "Research prototype — not for clinical use",
     }
+
+
+@app.get("/model-info", response_model=ModelInfoResponse)
+@app.get("/api/model-info", response_model=ModelInfoResponse)
+async def model_info():
+    """Returns metadata about the currently loaded model and its verified metrics."""
+    return get_model_info()
 
 
 @app.post("/predict", response_model=PredictionResponse)
@@ -73,7 +79,7 @@ async def predict(
         result = get_prediction(temp_path, generate_gradcam=gradcam)
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Diagnostic Pipeline Error: {str(e)}") from e
+        raise HTTPException(status_code=500, detail=f"Prediction Error: {str(e)}") from e
     finally:
         if temp_path and os.path.exists(temp_path):
             try:
@@ -110,14 +116,3 @@ async def explain(file: UploadFile = File(...)):
                 os.remove(temp_path)
             except Exception:
                 pass
-
-
-@app.get("/experiments", response_model=ExperimentsResponse)
-@app.get("/api/experiments", response_model=ExperimentsResponse)
-async def get_experiments():
-    progression_path = Path("artifacts/experiment_progression.json")
-    if not progression_path.exists():
-        raise HTTPException(status_code=404, detail="Experiment progression results not found. Run scripts/run_experiments_pipeline.py first.")
-    
-    data = json.loads(progression_path.read_text(encoding="utf-8"))
-    return data

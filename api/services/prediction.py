@@ -1,4 +1,5 @@
 import base64
+import json
 import sys
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -15,6 +16,37 @@ DEFAULT_CONFIG = "configs/efficientnet_b0.json"
 DEFAULT_CHECKPOINT = "artifacts/smoke_test/best_model.pt"
 
 
+def get_model_info(
+    config_path: str = DEFAULT_CONFIG,
+    checkpoint_path: str = DEFAULT_CHECKPOINT,
+) -> Dict[str, Any]:
+    """Returns metadata about the currently loaded model."""
+    # Check for verified metrics alongside the checkpoint
+    checkpoint_dir = Path(checkpoint_path).parent
+    verified_metrics = None
+
+    metrics_path = checkpoint_dir / "test_metrics.json"
+    if metrics_path.exists():
+        try:
+            verified_metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+
+    # Try to determine experiment ID from directory name
+    experiment_id = None
+    if checkpoint_dir.name.startswith("EXP-"):
+        experiment_id = checkpoint_dir.name
+
+    return {
+        "model_architecture": "efficientnet_b0",
+        "checkpoint_path": str(checkpoint_path),
+        "config_path": str(config_path),
+        "experiment_id": experiment_id,
+        "verified_metrics": verified_metrics,
+        "disclaimer": "Research prototype — metrics are from verified experiments only",
+    }
+
+
 def get_prediction(
     image_path: str,
     config_path: str = DEFAULT_CONFIG,
@@ -22,7 +54,7 @@ def get_prediction(
     generate_gradcam: bool = False,
     gradcam_output_path: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Adapter function calling the enterprise dr_detection.infer.predict_image pipeline."""
+    """Adapter function calling the dr_detection.infer.predict_image pipeline."""
     return predict_image(
         config_path=config_path,
         checkpoint_path=checkpoint_path,

@@ -118,36 +118,3 @@ def calibration_metrics(y_true: np.ndarray, y_pred_prob: np.ndarray) -> dict:
         "brier_score": float(brier),
         "expected_calibration_error": float(ece),
     }
-
-
-if __name__ == "__main__":
-    print("==================================================")
-    print(" RetinAI DR - Metrics Verification & Self-Test")
-    print("==================================================")
-    
-    # Mock ground truth and predicted labels (5 classes: 0 to 4)
-    mock_true = [0, 1, 2, 3, 4, 0, 1, 2, 3, 4]
-    mock_pred = [0, 1, 2, 3, 3, 0, 2, 2, 3, 4]
-    
-    clf_res = classification_metrics(mock_true, mock_pred, num_classes=5)
-    print(f"[OK] Classification Accuracy : {clf_res['accuracy'] * 100:.1f}%")
-    print(f"[OK] Quadratic Weighted Kappa: {clf_res['quadratic_weighted_kappa']:.4f}")
-    print(f"[OK] Macro F1 Score          : {clf_res['macro_f1']:.4f}")
-    
-    # Mock probabilities for referable DR evaluation (10 samples, 5 classes)
-    np.random.seed(42)
-    mock_probs = np.random.dirichlet(np.ones(5), size=10)
-    mock_true_arr = np.array(mock_true)
-    
-    referable_res = binary_referable_metrics(mock_true_arr, mock_probs, threshold=0.5)
-    print(f"[OK] Referable DR Sensitivity : {referable_res['sensitivity'] * 100:.1f}%")
-    print(f"[OK] Referable DR Specificity : {referable_res['specificity'] * 100:.1f}%")
-    print(f"[OK] Referable DR ROC-AUC     : {referable_res['roc_auc']:.4f}")
-    
-    calib_res = calibration_metrics(mock_true_arr, mock_probs)
-    print(f"[OK] Expected Calib. Error    : {calib_res['expected_calibration_error']:.4f}")
-    print(f"[OK] Brier Score              : {calib_res['brier_score']:.4f}")
-    print("==================================================")
-    print(" >> All metrics verified and working perfectly! <<")
-    print("==================================================")
-

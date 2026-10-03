@@ -1,0 +1,116 @@
+{
+  "manifest_path": "data/manifests/aptos_fixed_manifest.csv",
+  "total_rows": 3329,
+  "columns": [
+    "image_id",
+    "image_path",
+    "label",
+    "source",
+    "exists",
+    "split"
+  ],
+  "label_stats": {
+    "valid_range": [
+      0,
+      4
+    ],
+    "unique_labels": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "invalid_labels": [],
+    "class_distribution": {
+      "0": 1703,
+      "1": 331,
+      "2": 860,
+      "3": 171,
+      "4": 264
+    }
+  },
+  "split_stats": {
+    "splits_found": [
+      "test",
+      "train",
+      "val"
+    ],
+    "split_counts": {
+      "train": 2346,
+      "val": 496,
+      "test": 487
+    }
+  },
+  "split_class_distribution": {
+    "test": {
+      "0": 255,
+      "1": 49,
+      "2": 120,
+      "3": 26,
+      "4": 37
+    },
+    "train": {
+      "0": 1192,
+      "1": 234,
+      "2": 612,
+      "3": 121,
+      "4": 187
+    },
+    "val": {
+      "0": 256,
+      "1": 48,
+      "2": 128,
+      "3": 24,
+      "4": 40
+    }
+  },
+  "file_stats": {
+    "existing_images": 3329,
+    "missing_images": 0,
+    "missing_files_sample": []
+  },
+  "duplicate_stats": {
+    "duplicate_filenames": 0,
+    "duplicate_filenames_sample": {}
+  },
+  "isolation": {
+    "train_val_overlap": 0,
+    "train_test_overlap": 0,
+    "val_test_overlap": 0,
+    "is_isolated": true
+  },
+  "content_duplicate_stats": {
+    "sample_size": 500,
+    "content_duplicates_found": 0,
+    "content_duplicates_sample": {}
+  },
+  "cross_split_content_duplicates": {
+    "found": 0,
+    "sample": {}
+  },
+  "image_dimensions": {
+    "sample_size": 100,
+    "width_range": [
+      224,
+      224
+    ],
+    "height_range": [
+      224,
+      224
+    ],
+    "mean_width": 224.0,
+    "mean_height": 224.0
+  },
+  "summary": {
+    "total_images": 3329,
+    "existing_images": 3329,
+    "train_count": 2346,
+    "val_count": 496,
+    "test_count": 487,
+    "splits_isolated": true,
+    "no_invalid_labels": true,
+    "no_cross_split_duplicates": true,
+    "dataset_verified": true
+  }
+}

@@ -10,6 +10,7 @@ from PIL import Image
 
 from dr_detection.config import load_config
 from dr_detection.gradcam import make_gradcam
+from dr_detection.manifest import normalize_image_path
 from dr_detection.models import create_model
 from dr_detection.quality import (
     QualityThresholds,
@@ -35,35 +36,35 @@ CLINICAL_RECOMMENDATIONS = {
         "color": "#10B981", # Green
         "referable": False,
         "urgency": "Routine",
-        "action": "No apparent retinopathy detected. Annual routine screening recommended."
+        "action": "No apparent retinopathy detected. Routine follow-up screening recommended."
     },
     1: {
         "severity": "Mild NPDR",
         "color": "#F59E0B", # Amber
         "referable": False,
         "urgency": "Low-Moderate",
-        "action": "Microaneurysms detected. Comprehensive dilated eye exam in 6–12 months."
+        "action": "Microaneurysms potentially detected. Clinical assessment by a qualified ophthalmologist is recommended."
     },
     2: {
         "severity": "Moderate NPDR",
         "color": "#F97316", # Orange
         "referable": True,
         "urgency": "Moderate",
-        "action": "Referable DR. Referral to Ophthalmologist/Retinal Specialist within 3–6 months."
+        "action": "Potentially referable diabetic retinopathy detected. Clinical assessment by a qualified ophthalmologist is recommended."
     },
     3: {
         "severity": "Severe NPDR",
         "color": "#EF4444", # Red
         "referable": True,
         "urgency": "High",
-        "action": "High-risk pre-proliferative retinopathy. Urgent specialist referral within 2–4 weeks."
+        "action": "Potentially severe retinopathy detected. Prompt clinical assessment by a qualified ophthalmologist is recommended."
     },
     4: {
         "severity": "Proliferative DR",
         "color": "#991B1B", # Dark Red
         "referable": True,
         "urgency": "Critical",
-        "action": "Neovascularization / severe lesions. Emergency retinal intervention within 24–48 hours."
+        "action": "Potentially proliferative retinopathy detected. Urgent clinical assessment by a qualified ophthalmologist is recommended."
     }
 }
 
@@ -98,17 +99,17 @@ def predict_image(
     generate_gradcam: bool = False,
     gradcam_output_path: Optional[str | Path] = None,
 ) -> dict:
-    """Enterprise inference pipeline with Quality Gate, TTA, Cohen's Kappa Threshold Optimization,
-    Referable DR risk scoring, and optional Grad-CAM explainability.
+    """Research inference pipeline with Quality Gate, TTA, threshold optimization,
+    referable DR risk scoring, and optional Grad-CAM explainability.
     """
     import torch
 
-    image_path = Path(image_path)
+    image_path = normalize_image_path(image_path)
     if not image_path.exists():
         raise FileNotFoundError(f"Image not found at {image_path}")
 
     # Checkpoint check
-    checkpoint_path = Path(checkpoint_path)
+    checkpoint_path = normalize_image_path(checkpoint_path)
     if not checkpoint_path.exists():
         raise FileNotFoundError(f"Checkpoint not found at {checkpoint_path}")
 

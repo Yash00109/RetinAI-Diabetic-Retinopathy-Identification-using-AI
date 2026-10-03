@@ -7,8 +7,16 @@ class HealthResponse(BaseModel):
     status: str
     version: str
     device: str
-    target_accuracy_met: bool
-    target_qwk_met: bool
+    disclaimer: str
+
+
+class ModelInfoResponse(BaseModel):
+    model_architecture: str
+    checkpoint_path: str
+    config_path: str
+    experiment_id: Optional[str] = None
+    verified_metrics: Optional[Dict[str, Any]] = None
+    disclaimer: str = "Research prototype — metrics are from verified experiments only"
 
 
 class QualityMetrics(BaseModel):
@@ -57,9 +65,3 @@ class ExplainResponse(BaseModel):
     predicted_class: int
     class_name: str
     gradcam_base64: str
-
-
-class ExperimentsResponse(BaseModel):
-    final_performance: Dict[str, Any]
-    optimal_thresholds: List[float]
-    stages: List[Dict[str, Any]]
