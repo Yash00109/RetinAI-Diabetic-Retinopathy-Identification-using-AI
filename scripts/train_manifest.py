@@ -62,7 +62,8 @@ def main() -> None:
     (output_dir / "run_config.json").write_text(json.dumps(vars(args), indent=2), encoding="utf-8")
 
     manifest = pd.read_csv(args.manifest)
-    manifest = manifest[manifest.get("exists", True).astype(bool)] if "exists" in manifest.columns else manifest
+    if "exists" in manifest.columns:
+        manifest = manifest[manifest["exists"].astype(bool)]
     train_frame = manifest[manifest["split"] == "train"].reset_index(drop=True)
     val_frame = manifest[manifest["split"] == "val"].reset_index(drop=True)
     test_frame = manifest[manifest["split"] == "test"].reset_index(drop=True)
@@ -88,10 +89,8 @@ def main() -> None:
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = create_model(args.model, 5, pretrained=not args.no_pretrained, drop_rate=args.drop_rate)
-    model.num_classes = 5
     if torch.cuda.device_count() > 1:
         model = nn.DataParallel(model)
-        model.num_classes = 5
     model = model.to(device)
 
     weights = class_weights_from_labels(train_frame["label"], 5).to(device)

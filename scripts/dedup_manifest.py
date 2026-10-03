@@ -94,7 +94,7 @@ def main():
     print(f"Removing {len(indices_to_remove)} duplicate rows")
 
     # Remove duplicates and drop hash column
-    cleaned = manifest.drop(index=indices_to_remove).drop(columns=["content_hash"]).reset_index(drop=True)
+    cleaned = manifest.drop(index=list(indices_to_remove)).drop(columns=["content_hash"]).reset_index(drop=True)
     
     # Save
     output_path = Path(args.output)

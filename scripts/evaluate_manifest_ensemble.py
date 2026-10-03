@@ -77,7 +77,14 @@ def main() -> None:
         if val_y is None:
             val_y = current_val_y
             test_y = current_test_y
-        elif not (np.array_equal(val_y, current_val_y) and np.array_equal(test_y, current_test_y)):
+        elif (
+            val_y is None
+            or test_y is None
+            or not (
+                np.array_equal(val_y, current_val_y)
+                and np.array_equal(test_y, current_test_y)
+            )
+        ):
             raise ValueError("Checkpoint predictions were generated against mismatched labels.")
 
         val_probs = softmax(val_logits)
@@ -90,7 +97,9 @@ def main() -> None:
             torch.cuda.empty_cache()
 
     assert val_y is not None and test_y is not None
+    assert val_probs_sum is not None
     val_probs_avg = val_probs_sum / len(args.checkpoints)
+    assert test_probs_sum is not None
     test_probs_avg = test_probs_sum / len(args.checkpoints)
     val_scores = expected_scores(np.log(np.clip(val_probs_avg, 1e-12, 1.0)))
     test_scores = expected_scores(np.log(np.clip(test_probs_avg, 1e-12, 1.0)))

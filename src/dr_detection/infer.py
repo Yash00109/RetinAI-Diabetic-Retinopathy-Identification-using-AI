@@ -126,7 +126,7 @@ def predict_image(
             "prediction": None,
             "clinical_recommendation": {
                 "urgency": "Retake Required",
-                "action": f"Image rejected by quality audit: {', '.join(quality.rejection_reasons)}. Please acquire a new clear, focused, centered fundus photograph."
+                "action": f"Image rejected by quality audit: {', '.join(quality.reasons)}. Please acquire a new clear, focused, centered fundus image."
             }
         }
 

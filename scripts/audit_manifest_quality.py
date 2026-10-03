@@ -39,7 +39,7 @@ def audit_manifest(manifest_path: Path, thresholds: QualityThresholds) -> pd.Dat
                     "audit_error": str(exc),
                 }
             )
-        item["manifest_row"] = int(idx)
+        item["manifest_row"] = int(str(idx))
         rows.append(item)
     return pd.DataFrame(rows)
 

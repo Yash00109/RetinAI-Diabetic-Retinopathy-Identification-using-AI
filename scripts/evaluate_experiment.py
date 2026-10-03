@@ -53,7 +53,6 @@ def evaluate(args):
     drop_rate = config.get("drop_rate", 0.25)
     
     model = create_model(model_name, 5, pretrained=False, drop_rate=drop_rate)
-    model.num_classes = 5
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     model.load_state_dict(ckpt["model_state"])
     model = model.to(device)

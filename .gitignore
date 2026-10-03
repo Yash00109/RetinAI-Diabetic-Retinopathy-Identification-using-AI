@@ -18,6 +18,8 @@ data/raw/*
 data/processed/*
 !data/processed/.gitkeep
 artifacts/*
+!artifacts/EXP-001R/
+!artifacts/EXP-001R/*
 !artifacts/.gitkeep
 !artifacts/smoke_test/
 !artifacts/smoke_test/**

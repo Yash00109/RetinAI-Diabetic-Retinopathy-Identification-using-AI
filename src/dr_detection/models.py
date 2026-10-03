@@ -1,4 +1,5 @@
 from __future__ import annotations
+import torch.nn as nn
 
 
 def create_model(name: str, num_classes: int, pretrained: bool = True, drop_rate: float = 0.25):
@@ -42,7 +43,7 @@ def create_model(name: str, num_classes: int, pretrained: bool = True, drop_rate
     raise ValueError(f"Unsupported model '{name}'. Install timm for more EfficientNet variants.")
 
 
-class SimpleCNN:
+class SimpleCNN(nn.Module):
     def __new__(cls, num_classes: int, drop_rate: float = 0.30):
         import torch.nn as nn
 

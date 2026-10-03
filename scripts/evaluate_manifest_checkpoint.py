@@ -75,7 +75,12 @@ def optimize_thresholds(
         score = threshold_score(y_true, preds, metric)
         if score > best_score:
             best_score = score
-            best_thresholds = tuple(float(round(x, 4)) for x in thresholds)
+            best_thresholds = (
+    float(round(thresholds[0], 4)),
+    float(round(thresholds[1], 4)),
+    float(round(thresholds[2], 4)),
+    float(round(thresholds[3], 4)),
+)
     return best_thresholds, float(best_score)
 
 

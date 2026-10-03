@@ -3,6 +3,10 @@
   "venv": ".venv",
   "extraPaths": [
     "src",
-    "."
+    ".",
+    "scripts"
+  ],
+  "exclude": [
+    "notebooks"
   ]
 }

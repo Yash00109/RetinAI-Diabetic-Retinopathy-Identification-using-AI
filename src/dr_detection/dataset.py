@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Callable
 
 import pandas as pd
+import torch
 from PIL import Image
 from sklearn.model_selection import train_test_split
 
@@ -17,7 +18,7 @@ from dr_detection.quality import (
 )
 
 
-class AptosDataset:
+class AptosDataset(torch.utils.data.Dataset):
     def __init__(
         self,
         frame: pd.DataFrame,
@@ -43,13 +44,13 @@ class AptosDataset:
     def __len__(self) -> int:
         return len(self.frame)
 
-    def _image_path(self, idx: int) -> Path:
-        image_id = str(self.frame.loc[idx, self.image_col])
+    def _image_path(self, index: int) -> Path:
+        image_id = str(self.frame.loc[index, self.image_col])
         suffix = "" if image_id.lower().endswith((".png", ".jpg", ".jpeg")) else self.image_ext
         return normalize_image_path(self.image_dir / f"{image_id}{suffix}")
 
-    def __getitem__(self, idx: int):
-        path = self._image_path(idx)
+    def __getitem__(self, index: int):
+        path = self._image_path(index)
         rgb = load_rgb_image(path)
 
         if self.quality_filter:
@@ -61,14 +62,14 @@ class AptosDataset:
             rgb = crop_to_retina(rgb)
 
         image = Image.fromarray(rgb)
-        label = int(self.frame.loc[idx, self.label_col])
+        label = int(str(self.frame.loc[index, self.label_col]))
 
         if self.transform:
             image = self.transform(image)
         return image, label
 
 
-class ManifestImageDataset:
+class ManifestImageDataset(torch.utils.data.Dataset):
     """Dataset backed by a frozen manifest CSV.
 
     Parameters
@@ -110,10 +111,13 @@ class ManifestImageDataset:
     def __len__(self) -> int:
         return len(self.frame)
 
-    def __getitem__(self, idx: int):
-        path = normalize_image_path(self.frame.loc[idx, self.image_col], root_dir=self.root_dir)
+    def __getitem__(self, index: int):
+        path = normalize_image_path(
+            str(self.frame.loc[index, self.image_col]),
+            root_dir=self.root_dir,
+        )
         image = Image.open(path).convert("RGB")
-        label = int(self.frame.loc[idx, self.label_col])
+        label = int(str(self.frame.loc[index, self.label_col]))
         if self.label_transform is not None:
             image = self.label_transform(image, label)
         elif self.transform is not None:

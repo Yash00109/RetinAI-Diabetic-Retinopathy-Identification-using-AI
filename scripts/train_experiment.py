@@ -226,8 +226,12 @@ def main() -> None:
     )
     
     if batch_sampler is not None:
-        # pyrefly: ignore [bad-argument-type]
-        train_loader = DataLoader(train_ds, batch_sampler=batch_sampler, num_workers=args.workers, pin_memory=True)
+        train_loader = DataLoader(
+            train_ds,
+            batch_sampler=batch_sampler,
+            num_workers=args.workers,
+            pin_memory=True,
+        )
     else:
         train_loader = DataLoader(
             train_ds, batch_size=args.batch_size, shuffle=use_shuffle,
@@ -238,10 +242,10 @@ def main() -> None:
     # Model
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = create_model(args.model, 5, pretrained=not args.no_pretrained, drop_rate=args.drop_rate)
-    model.num_classes = 5
+
     if torch.cuda.device_count() > 1:
         model = nn.DataParallel(model)
-        model.num_classes = 5
+
     model = model.to(device)
     
     # Loss

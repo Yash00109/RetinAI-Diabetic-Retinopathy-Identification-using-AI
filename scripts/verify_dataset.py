@@ -22,8 +22,8 @@ if str(SRC_DIR) not in sys.path:
 
 try:
     if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
-        # pyrefly: ignore [missing-attribute]
-        sys.stdout.reconfigure(encoding="utf-8")
+         # pyrefly: ignore [missing-attribute]
+         sys.stdout.reconfigure(encoding="utf-8")
 except Exception:
     pass
 
