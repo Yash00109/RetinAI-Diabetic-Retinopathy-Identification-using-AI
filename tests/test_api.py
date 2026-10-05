@@ -33,8 +33,8 @@ def test_api_model_info(client):
     assert res.status_code == 200
     data = res.json()
     assert "model_architecture" in data
-    assert "checkpoint_path" in data
-    assert "config_path" in data
+    assert "experiment_id" in data
+    assert "verified_metrics" in data
     assert "disclaimer" in data
 
 

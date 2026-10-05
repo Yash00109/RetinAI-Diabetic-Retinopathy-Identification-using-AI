@@ -12,8 +12,6 @@ class HealthResponse(BaseModel):
 
 class ModelInfoResponse(BaseModel):
     model_architecture: str
-    checkpoint_path: str
-    config_path: str
     experiment_id: Optional[str] = None
     verified_metrics: Optional[Dict[str, Any]] = None
     disclaimer: str = "Research prototype — metrics are from verified experiments only"

@@ -91,7 +91,7 @@ def get_cached_model(config_path: str | Path, checkpoint_path: str | Path, devic
 
 def predict_image(
     config_path: str | Path = "configs/efficientnet_b0.json",
-    checkpoint_path: str | Path = "artifacts/smoke_test/best_model.pt",
+    checkpoint_path: str | Path = "artifacts/EXP-001R/best_model.pt",
     image_path: str | Path = "",
     use_tta: bool = True,
     use_threshold_optimization: bool = True,
@@ -157,7 +157,7 @@ def predict_image(
 
     # 5. Referable DR Risk Score: P(Grade >= 2)
     referable_probability = float(np.sum(probs[2:]))
-    is_referable = bool(pred >= 2 or referable_probability >= 0.50)
+    is_referable = (pred >= 2 or referable_probability >= 0.50)
 
     recommendation = CLINICAL_RECOMMENDATIONS.get(pred, CLINICAL_RECOMMENDATIONS[0])
 
@@ -193,7 +193,7 @@ def predict_image(
 def main() -> None:
     parser = argparse.ArgumentParser(description="RetinAI-DR Production Inference Engine")
     parser.add_argument("--config", default="configs/efficientnet_b0.json")
-    parser.add_argument("--checkpoint", default="artifacts/smoke_test/best_model.pt")
+    parser.add_argument("--checkpoint", default="artifacts/EXP-001R/best_model.pt")
     parser.add_argument("--image", required=True)
     parser.add_argument("--gradcam", action="store_true")
     parser.add_argument("--gradcam-output", default=None)

@@ -53,10 +53,7 @@ class OrdinalDistanceLoss(nn.Module):
     """Combines Cross Entropy with an Ordinal Quadratic Distance Penalty:
     L = L_CE + lambda * sum_j P(pred=j) * (j - true_label)^2
     
-    Directly aligns neural network training with the Quadratic Weighted Kappa (QWK)
-    evaluation metric by penalizing multi-grade misclassifications proportionally
-    to the squared clinical distance.
-    """
+    Ordinal-aware loss that penalizes prediction errors according to their grade distance.    """
     def __init__(
         self,
         num_classes: int = 5,

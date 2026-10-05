@@ -456,10 +456,10 @@ The current README reports only results associated with the reconstructed experi
 
 | Metric            | Test Result |
 | ----------------- | ----------: |
-| Accuracy          |  **0.7803** |
-| Balanced Accuracy |  **0.6180** |
-| Macro F1          |  **0.6100** |
-| QWK               |  **0.8769** |
+| Accuracy          |  **0.8049** |
+| Balanced Accuracy |  **0.6507** |
+| Macro F1          |  **0.6489** |
+| QWK               |  **0.8950** |
 
 **Configuration:**
 

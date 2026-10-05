@@ -13,7 +13,7 @@ if str(SRC_DIR) not in sys.path:
 from dr_detection.infer import predict_image
 
 DEFAULT_CONFIG = "configs/efficientnet_b0.json"
-DEFAULT_CHECKPOINT = "artifacts/smoke_test/best_model.pt"
+DEFAULT_CHECKPOINT = "artifacts/EXP-001R/best_model.pt"
 
 
 def get_model_info(
@@ -25,7 +25,7 @@ def get_model_info(
     checkpoint_dir = Path(checkpoint_path).parent
     verified_metrics = None
 
-    metrics_path = checkpoint_dir / "test_metrics.json"
+    metrics_path = checkpoint_dir / "metrics.json"
     if metrics_path.exists():
         try:
             verified_metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
@@ -39,11 +39,9 @@ def get_model_info(
 
     return {
         "model_architecture": "efficientnet_b0",
-        "checkpoint_path": str(checkpoint_path),
-        "config_path": str(config_path),
         "experiment_id": experiment_id,
         "verified_metrics": verified_metrics,
-        "disclaimer": "Research prototype — metrics are from verified experiments only",
+        "disclaimer": "Research prototype - metrics are from verified experiments only",
     }
 
 

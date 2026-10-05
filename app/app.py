@@ -237,11 +237,11 @@ VERIFIED_RESULTS = {
     "experiment": "EXP-001R",
     "dataset": "APTOS 2019",
     "model": "EfficientNet-B0",
-    "resolution": "224x224",
+    "resolution": "384x384",
     "accuracy": 0.8049,
-    "balanced_accuracy": 0.6474,
-    "macro_f1": 0.6443,
-    "qwk": 0.8959,
+    "balanced_accuracy": 0.6507,
+    "macro_f1": 0.6489,
+    "qwk": 0.8950,
 }
 
 GRADE_LABELS = {
@@ -736,9 +736,9 @@ with tabs[1]:
     st.markdown("#### Baseline vs Ordinal Experiment")
     st.dataframe(pd.DataFrame([
         {"Metric": "Accuracy", "EXP-000": "78.03%", "EXP-001R": "80.49%"},
-        {"Metric": "Balanced Accuracy", "EXP-000": "61.80%", "EXP-001R": "64.74%"},
-        {"Metric": "Macro F1", "EXP-000": "0.6100", "EXP-001R": "0.6443"},
-        {"Metric": "QWK", "EXP-000": "0.8769", "EXP-001R": "0.8959"},
+        {"Metric": "Balanced Accuracy", "EXP-000": "61.80%", "EXP-001R": "65.07%"},
+        {"Metric": "Macro F1", "EXP-000": "0.6100", "EXP-001R": "0.6489"},
+        {"Metric": "QWK", "EXP-000": "0.8769", "EXP-001R": "0.8950"},
     ]), use_container_width=True, hide_index=True)
 
     st.info(
@@ -750,7 +750,7 @@ with tabs[1]:
     st.subheader("Experiment Record")
     st.dataframe(pd.DataFrame([
         {"Experiment":"EXP-000","Model":"EfficientNet-B0","Loss":"Weighted Cross-Entropy","Accuracy":"78.03%","Balanced Accuracy":"61.80%","Macro F1":"0.6100","QWK":"0.8769","Evaluation":"Verified test result"},
-        {"Experiment":"EXP-001R","Model":"EfficientNet-B0","Loss":"Ordinal-aware loss","Accuracy":"80.49%","Balanced Accuracy":"64.74%","Macro F1":"0.6443","QWK":"0.8959","Evaluation":"Verified test result"},
+        {"Experiment":"EXP-001R","Model":"EfficientNet-B0","Loss":"Ordinal-aware loss","Accuracy":"80.49%","Balanced Accuracy":"65.07%","Macro F1":"0.6489","QWK":"0.8950","Evaluation":"Verified test result"},
         {"Experiment":"EXP-002","Model":"EfficientNet-B0","Loss":"Targeted augmentation","Accuracy":"—","Balanced Accuracy":"—","Macro F1":"—","QWK":"—","Evaluation":"Not retained as a verified improvement"},
         {"Experiment":"EXP-003R","Model":"EfficientNet-B0","Loss":"Class-aware sampling","Accuracy":"—","Balanced Accuracy":"—","Macro F1":"0.6420","QWK":"0.8843","Evaluation":"Validation result only"},
     ]), use_container_width=True, hide_index=True)
