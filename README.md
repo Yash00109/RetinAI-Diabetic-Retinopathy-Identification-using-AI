@@ -456,10 +456,10 @@ The current README reports only results associated with the reconstructed experi
 
 | Metric            | Test Result |
 | ----------------- | ----------: |
-| Accuracy          |  **0.8049** |
-| Balanced Accuracy |  **0.6507** |
-| Macro F1          |  **0.6489** |
-| QWK               |  **0.8950** |
+| Accuracy          |  **0.7803** |
+| Balanced Accuracy |  **0.6180** |
+| Macro F1          |  **0.6100** |
+| QWK               |  **0.8769** |
 
 **Configuration:**
 
@@ -475,25 +475,25 @@ This experiment serves as the baseline against which subsequent experiments are 
 
 ## EXP-001R — Ordinal-Aware Loss
 
-The ordinal-loss experiment improved the main evaluation metrics relative to the baseline.
+EXP-001R is the selected/best verified experiment in the current research workflow. Its test-set results are:
 
 | Metric            | Test Result |
 | ----------------- | ----------: |
 | Accuracy          |  **0.8049** |
-| Balanced Accuracy |  **0.6474** |
-| Macro F1          |  **0.6443** |
-| QWK               |  **0.8959** |
+| Balanced Accuracy |  **0.6507** |
+| Macro F1          |  **0.6489** |
+| QWK               |  **0.8950** |
 
 Compared with EXP-000:
 
 | Metric            | EXP-000 |   EXP-001R |
 | ----------------- | ------: | ---------: |
 | Accuracy          |  0.7803 | **0.8049** |
-| Balanced Accuracy |  0.6180 | **0.6474** |
-| Macro F1          |  0.6100 | **0.6443** |
-| QWK               |  0.8769 | **0.8959** |
+| Balanced Accuracy |  0.6180 | **0.6507** |
+| Macro F1          |  0.6100 | **0.6489** |
+| QWK               |  0.8769 | **0.8950** |
 
-The improvement is particularly relevant because both Macro F1 and Balanced Accuracy increased, rather than the gain being limited to overall accuracy.
+The improvement is particularly relevant because Accuracy, Balanced Accuracy, Macro F1, and QWK all increased relative to EXP-000.
 
 ---
 
