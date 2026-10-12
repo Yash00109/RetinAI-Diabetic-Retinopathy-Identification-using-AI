@@ -232,16 +232,19 @@ BENCHMARK_SAMPLES = {
 
 DEFAULT_CONFIG = "configs/efficientnet_b0.json"
 
-DEFAULT_CHECKPOINT = "artifacts/smoke_test/best_model.pt"
-VERIFIED_RESULTS = {
+DEFAULT_CHECKPOINT = "artifacts/EXP-001R/best_model.pt"
+CALIBRATED_RESULTS = {
     "experiment": "EXP-001R",
     "dataset": "APTOS 2019",
     "model": "EfficientNet-B0",
     "resolution": "384x384",
-    "accuracy": 0.8049,
-    "balanced_accuracy": 0.6507,
-    "macro_f1": 0.6489,
-    "qwk": 0.8950,
+    "accuracy": 0.7823,
+    "balanced_accuracy": 0.6577,
+    "macro_f1": 0.6421,
+    "qwk": 0.8918,
+    "grade_1_recall": 0.4694,
+    "grade_3_recall": 0.6154,
+    "grade_4_recall": 0.6216,
 }
 
 GRADE_LABELS = {
@@ -277,10 +280,15 @@ def _ordered_probabilities(probabilities: dict) -> pd.DataFrame:
             raise ValueError(f"Unrecognised class name from model: {raw_name!r}")
         rows.append({
             "grade_id": grade,
-            "Grade": f"{grade} · {GRADE_LABELS[grade]}",
+            "Grade": str(grade),
+            "Class": GRADE_LABELS[grade],
             "Probability (%)": prob * 100,
         })
-    return pd.DataFrame(rows).sort_values("grade_id").reset_index(drop=True)
+    probability_df = pd.DataFrame(rows).sort_values("grade_id").reset_index(drop=True)
+    expected_grades = {str(grade) for grade in GRADE_LABELS}
+    if set(probability_df["Grade"]) != expected_grades:
+        raise ValueError("Expected probability scores for all five grades (0-4).")
+    return probability_df
 
 
 def _load_verified_metrics(checkpoint_path: str) -> dict | None:
@@ -331,9 +339,16 @@ with st.sidebar:
 
     checkpoint_path = st.text_input("Checkpoint Path", DEFAULT_CHECKPOINT)
 
-    use_tta = st.checkbox("Test-Time Augmentation (TTA)", value=True, help="Averages horizontal flip predictions for stabilized confidence")
+    use_tta = st.checkbox("Test-Time Augmentation (TTA)", value=False, help="Adds horizontal-flip averaging; off by default to match the verified evaluation protocol.")
 
-    use_opt_thresholds = st.checkbox("Optimal Cutoffs", value=True, help="Applies calibrated continuous cutoffs to maximize QWK")
+    use_opt_thresholds = st.checkbox(
+        "Validation-Calibrated Grade Thresholds",
+        value=True,
+        help=(
+            "Uses grade cutoffs selected on the APTOS validation split to improve balanced accuracy. "
+            "This raises minority-grade recall but trades off overall accuracy."
+        ),
+    )
 
 
 
@@ -341,20 +356,22 @@ with st.sidebar:
 
 
 
-    st.subheader("Verified Research Results")
-    st.caption("Best verified test-set result from EXP-001R.")
+    st.subheader("Exploratory Calibrated Results")
+    st.caption("EXP-001R · thresholds selected on validation · existing test split")
 
     sb1, sb2 = st.columns(2)
     with sb1:
-        st.metric("Accuracy", f'{VERIFIED_RESULTS["accuracy"] * 100:.2f}%')
-        st.metric("Macro F1", f'{VERIFIED_RESULTS["macro_f1"]:.4f}')
+        st.metric("Accuracy", f'{CALIBRATED_RESULTS["accuracy"] * 100:.2f}%')
+        st.metric("Macro F1", f'{CALIBRATED_RESULTS["macro_f1"]:.4f}')
     with sb2:
-        st.metric("QWK", f'{VERIFIED_RESULTS["qwk"]:.4f}')
-        st.metric("Balanced Acc.", f'{VERIFIED_RESULTS["balanced_accuracy"] * 100:.2f}%')
+        st.metric("QWK", f'{CALIBRATED_RESULTS["qwk"]:.4f}')
+        st.metric("Balanced Acc.", f'{CALIBRATED_RESULTS["balanced_accuracy"] * 100:.2f}%')
 
     st.caption(
-        f'{VERIFIED_RESULTS["experiment"]} · {VERIFIED_RESULTS["dataset"]} · '
-        f'{VERIFIED_RESULTS["model"]}'
+        f'{CALIBRATED_RESULTS["experiment"]} · {CALIBRATED_RESULTS["dataset"]} · '
+        f'{CALIBRATED_RESULTS["model"]} · '
+        f'Grade 1/3/4 recall: {CALIBRATED_RESULTS["grade_1_recall"]:.1%} / '
+        f'{CALIBRATED_RESULTS["grade_3_recall"]:.1%} / {CALIBRATED_RESULTS["grade_4_recall"]:.1%}'
     )
 
     st.divider()
@@ -590,7 +607,7 @@ with tabs[0]:
                             f"Grade {grade_id} ({grade_name}) is derived from the ordinal score "
                             f"({pred['expected_continuous_score']:.2f}) and its cutoffs. The highest raw class "
                             f"probability is Grade {top_grade} ({GRADE_LABELS[top_grade]}). "
-                            "Untick 'Optimal Cutoffs' in the sidebar to compare."
+                            "Disable 'Validation-Calibrated Grade Thresholds' in the sidebar to compare argmax."
                         )
 
                     # Referable DR Callout
@@ -627,7 +644,13 @@ with tabs[0]:
                                 "Grade:N",
                                 sort=prob_df["Grade"].tolist(),
                                 title=None,
-                                axis=alt.Axis(labelAngle=-30, labelLimit=220),
+                                scale=alt.Scale(domain=[str(grade) for grade in GRADE_LABELS]),
+                                axis=alt.Axis(
+                                    title="Grade",
+                                    labelExpr="'Grade ' + datum.value",
+                                    labelOverlap=False,
+                                    values=[str(grade) for grade in GRADE_LABELS],
+                                ),
                             ),
                             y=alt.Y(
                                 "Probability (%):Q",
@@ -635,6 +658,7 @@ with tabs[0]:
                             ),
                             tooltip=[
                                 "Grade",
+                                "Class",
                                 alt.Tooltip("Probability (%):Q", format=".1f"),
                             ],
                         )
@@ -713,37 +737,37 @@ with tabs[1]:
 
 
 
-    st.subheader("Verified Research Metrics")
+    st.subheader("Exploratory Calibrated Test Metrics")
     st.caption(
-        "Verified test-set results from EXP-001R. These describe the research "
-        "experiment, not the currently uploaded image."
+        "Validation-calibrated decision rule evaluated on the existing test split; "
+        "these summarize the experiment, not the currently uploaded image."
     )
 
     cols = st.columns(4)
-    cols[0].metric("Test Accuracy", f'{VERIFIED_RESULTS["accuracy"] * 100:.2f}%')
-    cols[1].metric("QWK", f'{VERIFIED_RESULTS["qwk"]:.4f}')
-    cols[2].metric("Macro F1", f'{VERIFIED_RESULTS["macro_f1"]:.4f}')
-    cols[3].metric("Balanced Accuracy", f'{VERIFIED_RESULTS["balanced_accuracy"] * 100:.2f}%')
+    cols[0].metric("Test Accuracy", f'{CALIBRATED_RESULTS["accuracy"] * 100:.2f}%')
+    cols[1].metric("QWK", f'{CALIBRATED_RESULTS["qwk"]:.4f}')
+    cols[2].metric("Macro F1", f'{CALIBRATED_RESULTS["macro_f1"]:.4f}')
+    cols[3].metric("Balanced Accuracy", f'{CALIBRATED_RESULTS["balanced_accuracy"] * 100:.2f}%')
 
-    st.markdown("#### Verified Experiment")
+    st.markdown("#### Exploratory Calibrated Operating Point")
     st.dataframe(pd.DataFrame([{
-        "Experiment": VERIFIED_RESULTS["experiment"],
-        "Dataset": VERIFIED_RESULTS["dataset"],
-        "Model": VERIFIED_RESULTS["model"],
-        "Resolution": VERIFIED_RESULTS["resolution"],
+        "Experiment": CALIBRATED_RESULTS["experiment"],
+        "Dataset": CALIBRATED_RESULTS["dataset"],
+        "Model": CALIBRATED_RESULTS["model"],
+        "Resolution": CALIBRATED_RESULTS["resolution"],
     }]), use_container_width=True, hide_index=True)
 
     st.markdown("#### Baseline vs Ordinal Experiment")
     st.dataframe(pd.DataFrame([
-        {"Metric": "Accuracy", "EXP-000": "78.03%", "EXP-001R": "80.49%"},
-        {"Metric": "Balanced Accuracy", "EXP-000": "61.80%", "EXP-001R": "65.07%"},
-        {"Metric": "Macro F1", "EXP-000": "0.6100", "EXP-001R": "0.6489"},
-        {"Metric": "QWK", "EXP-000": "0.8769", "EXP-001R": "0.8950"},
+        {"Metric": "Accuracy", "EXP-000": "78.03%", "EXP-001R argmax": "80.49%", "EXP-001R calibrated": "78.23%"},
+        {"Metric": "Balanced Accuracy", "EXP-000": "61.80%", "EXP-001R argmax": "65.07%", "EXP-001R calibrated": "65.77%"},
+        {"Metric": "Macro F1", "EXP-000": "0.6100", "EXP-001R argmax": "0.6489", "EXP-001R calibrated": "0.6421"},
+        {"Metric": "QWK", "EXP-000": "0.8769", "EXP-001R argmax": "0.8950", "EXP-001R calibrated": "0.8918"},
     ]), use_container_width=True, hide_index=True)
 
     st.info(
-        "Research integrity: unsupported performance claims have been removed. "
-        "Only verified experiment results are displayed."
+        "Calibration was selected on validation data. Because this comparison follows prior "
+        "inspection of the test results, treat it as exploratory and confirm it on a new cohort."
     )
 
     st.divider()

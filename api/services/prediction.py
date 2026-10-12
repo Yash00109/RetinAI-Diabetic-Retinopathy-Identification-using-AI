@@ -57,7 +57,8 @@ def get_prediction(
         config_path=config_path,
         checkpoint_path=checkpoint_path,
         image_path=image_path,
-        use_tta=True,
+        # Use the validation-calibrated operating point; calibration used no TTA.
+        use_tta=False,
         use_threshold_optimization=True,
         generate_gradcam=generate_gradcam,
         gradcam_output_path=gradcam_output_path,

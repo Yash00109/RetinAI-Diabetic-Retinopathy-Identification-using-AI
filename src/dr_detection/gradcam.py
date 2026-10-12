@@ -10,7 +10,7 @@ from PIL import Image
 from dr_detection.config import load_config
 from dr_detection.manifest import normalize_image_path
 from dr_detection.models import create_model
-from dr_detection.quality import crop_to_retina, load_rgb_image
+from dr_detection.preprocessing import RetinaPreprocessConfig, RetinaPreprocessor
 from dr_detection.transforms import build_transforms
 
 
@@ -43,15 +43,22 @@ def make_gradcam(
     cfg = load_config(config_path)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model: Any = create_model(cfg.model.name, cfg.data.num_classes, pretrained=False, drop_rate=cfg.model.drop_rate)
-    checkpoint = torch.load(checkpoint_path, map_location=device)
+    checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
     model.load_state_dict(checkpoint["model_state"])
     model.to(device)
     model.eval()
 
-    rgb = crop_to_retina(load_rgb_image(image_path))
-    image = Image.fromarray(rgb)
-    transform: Any = build_transforms(cfg.train.image_size, train=False)
-    tensor = transform(image).unsqueeze(0).to(device)
+    with Image.open(image_path) as source_image:
+        image = source_image.convert("RGB")
+
+    # Keep the explanation tensor identical to prediction: both apply the same
+    # retinal preprocessing once, followed by resize, tensor conversion, and
+    # ImageNet normalization. Previously Grad-CAM cropped with a second,
+    # different algorithm before the transform cropped again.
+    preprocessed_image = RetinaPreprocessor(RetinaPreprocessConfig())(image)
+    transform: Any = build_transforms(cfg.train.image_size, train=False, preprocess=False)
+    tensor = transform(preprocessed_image).unsqueeze(0).to(device)
+    rgb = np.asarray(preprocessed_image)
 
     activations = []
     gradients = []

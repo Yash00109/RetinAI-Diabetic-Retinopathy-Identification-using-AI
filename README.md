@@ -475,7 +475,7 @@ This experiment serves as the baseline against which subsequent experiments are 
 
 ## EXP-001R — Ordinal-Aware Loss
 
-EXP-001R is the selected/best verified experiment in the current research workflow. Its test-set results are:
+EXP-001R is the selected/best verified experiment in the current research workflow. The following are its test-set results using the original argmax decision rule:
 
 | Metric            | Test Result |
 | ----------------- | ----------: |
@@ -494,6 +494,22 @@ Compared with EXP-000:
 | QWK               |  0.8769 | **0.8950** |
 
 The improvement is particularly relevant because Accuracy, Balanced Accuracy, Macro F1, and QWK all increased relative to EXP-000.
+
+### Validation-Calibrated Inference Operating Point (Exploratory)
+
+The default app/API inference path uses ordinal thresholds selected on the APTOS validation split to maximize balanced accuracy. The model weights are unchanged; this is a post-processing decision rule, not a retrained model. Thresholds are `[0.75, 1.85, 2.45, 3.05]` over the expected grade score, using 384 × 384 preprocessing and no test-time augmentation.
+
+| Metric | Argmax reference | Calibrated operating point |
+| --- | ---: | ---: |
+| Accuracy | 0.8049 | 0.7823 |
+| Balanced Accuracy | 0.6507 | 0.6577 |
+| Macro F1 | 0.6489 | 0.6421 |
+| QWK | 0.8950 | 0.8918 |
+| Grade 1 recall | 0.3878 | 0.4694 |
+| Grade 3 recall | 0.6154 | 0.6154 |
+| Grade 4 recall | 0.5405 | 0.6216 |
+
+The calibrated operating point prioritizes more even class sensitivity: on the existing test split, Grade 1 and Grade 4 recall increased while overall accuracy and Grade 2 recall decreased. This is an exploratory comparison made after prior inspection of the test results, so it must not be presented as a new independent confirmatory result. The calibration does not make the model clinically reliable; confirmation requires a new untouched cohort and improved model performance.
 
 ---
 

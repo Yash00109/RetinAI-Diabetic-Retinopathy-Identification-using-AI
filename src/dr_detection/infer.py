@@ -15,8 +15,6 @@ from dr_detection.models import create_model
 from dr_detection.quality import (
     QualityThresholds,
     analyze_fundus_quality,
-    crop_to_retina,
-    load_rgb_image,
 )
 from dr_detection.transforms import build_transforms
 
@@ -28,7 +26,9 @@ CLASS_NAMES = {
     4: "Proliferative DR",
 }
 
-DEFAULT_OPTIMAL_THRESHOLDS = [0.5842, 1.4821, 2.4783, 3.4610]
+# Selected on the APTOS validation split for balanced accuracy with the
+# EXP-001R preprocessing, 384 px input, and no TTA.
+DEFAULT_OPTIMAL_THRESHOLDS = [0.75, 1.85, 2.45, 3.05]
 
 CLINICAL_RECOMMENDATIONS = {
     0: {
@@ -93,7 +93,7 @@ def predict_image(
     config_path: str | Path = "configs/efficientnet_b0.json",
     checkpoint_path: str | Path = "artifacts/EXP-001R/best_model.pt",
     image_path: str | Path = "",
-    use_tta: bool = True,
+    use_tta: bool = False,
     use_threshold_optimization: bool = True,
     thresholds: Optional[List[float]] = None,
     generate_gradcam: bool = False,
@@ -124,15 +124,14 @@ def predict_image(
             "accepted": False,
             "quality": quality.as_dict(),
             "prediction": None,
-            "clinical_recommendation": {
-                "urgency": "Retake Required",
-                "action": f"Image rejected by quality audit: {', '.join(quality.reasons)}. Please acquire a new clear, focused, centered fundus image."
-            }
+            # A rejected image has no grade or clinical recommendation. Keep
+            # this null so API response validation agrees with its schema.
+            "clinical_recommendation": None,
         }
 
     # 2. Preprocessing & Tensor Building
-    rgb = crop_to_retina(load_rgb_image(image_path))
-    image = Image.fromarray(rgb)
+    with Image.open(image_path) as source_image:
+        image = source_image.convert("RGB")
     transform = build_transforms(cfg.train.image_size, train=False)
     tensor = transform(image).unsqueeze(0).to(device)
 
@@ -175,7 +174,11 @@ def predict_image(
                 "probability": round(referable_probability, 4),
                 "threshold": 0.50
             },
-            "decision_rule": "Nelder-Mead Optimal Cutoffs" if use_threshold_optimization else "Argmax"
+            "decision_rule": (
+                "Validation-calibrated expected-score thresholds"
+                if use_threshold_optimization
+                else "Argmax"
+            )
         },
         "clinical_recommendation": recommendation,
     }
